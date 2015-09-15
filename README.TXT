@@ -2,7 +2,7 @@
 IODClient library for Windows Universal is a lightweight C# based API, which helps you easily integrate 
 your Windows app with HP IDOL OnDemand Services.
 
-IODClient library supports both Wnidows and Windows Phone 8.1.
+IODClient library supports both Windows and Windows Phone 8.1.
 
 IODClient library requires .NET 4.5.
 
