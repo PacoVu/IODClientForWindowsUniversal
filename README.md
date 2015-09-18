@@ -22,9 +22,8 @@ IODClient library requires the .NET 4.5.
 >Constructor. Creates and initializes an IODClient object.
 
 *Parameters:*
->apiKey: your developer apikey.
-
->version: IDOL OnDemand API version. Currently it only supports version 1. Thus, the default value is “v1”.
+* apiKey: your developer apikey.
+* version: IDOL OnDemand API version. Currently it only supports version 1. Thus, the default value is “v1”.
 
 **GetRequest(ref Dictionary<String, Object> Params, String iodApp, REQ_MODE mode)**
 
@@ -32,13 +31,14 @@ IODClient library requires the .NET 4.5.
 >Sends a GET request to an IDOL OnDemand API.
 
 *Parameters:*
->params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API. 
+>Params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API. 
 
 >Note: 
 
 >In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary<String,String> object with the key is the parameter name and the values separated by commas ","
 
 >E.g.:
+## 
     var entity_array = new Dictionary<String, String>
     {
         {"entity_type", "people_eng,places_eng"}
@@ -61,7 +61,7 @@ IODClient library requires the .NET 4.5.
 >Sends a POST request to an IDOL OnDemand API.
 
 *Parameters:*
->params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API
+>Params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API
 
 >Note: 
 1. In the case of the "file" parameter, the value must be a StorageFile object.
