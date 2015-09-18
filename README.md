@@ -16,9 +16,11 @@ IODClient library requires the .NET 4.5.
 
 ----
 ## API References
-**3.1.	IODClient(string apiKey, String version="v1")**
+**IODClient(string apiKey, String version="v1")**
+
 *Description:* 
-Constructor. Creates and initializes an IODClient object
+>Constructor. Creates and initializes an IODClient object.
+
 *Parameters:*
 >apiKey: your developer apikey.
 >version: IDOL OnDemand API version. Currently it only supports version 1. Thus, the default value is “v1”.
@@ -45,8 +47,9 @@ Sends a GET request to an IDOL OnDemand API.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
 
 **PostRequest(ref Dictionary<String, Object> Params, String iodApp, REQ_MODE mode)**
+
 *Description:* 
-Sends a POST request to an IDOL OnDemand API.
+>Sends a POST request to an IDOL OnDemand API.
 *Parameters:*
 >params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API
 >Note: 
