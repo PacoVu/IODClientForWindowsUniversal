@@ -35,7 +35,7 @@ IODClient library requires the .NET 4.5.
 
 >Note: 
 
->In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary<String,String> object with the key is the parameter name and the values separated by commas ","
+>In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary\<String,String\> object with the key is the parameter name and the values separated by commas ","
 
 >E.g.:
 ## 
@@ -55,17 +55,17 @@ IODClient library requires the .NET 4.5.
 * If the mode is "SYNC", response will be returned via the requestCompletedWithContent(String response) callback function.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
 
-**PostRequest(ref Dictionary<String, Object> Params, String iodApp, REQ_MODE mode)**
+**PostRequest(ref Dictionary\<String, Object\> Params, String iodApp, REQ_MODE mode)**
 
 *Description:* 
->Sends a POST request to an IDOL OnDemand API.
+* Sends a POST request to an IDOL OnDemand API.
 
 *Parameters:*
->Params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API
+* Params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API
 
 >Note: 
 1. In the case of the "file" parameter, the value must be a StorageFile object.
-2. In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary<String,String> object with the key is the parameter name and the values separated by commas “,”. E.g.:
+2. In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary\<String,String\> object with the key is the parameter name and the values separated by commas “,”. E.g.:
 
 >E.g.:
     var entity_array = new Dictionary<String, String>
@@ -73,15 +73,15 @@ IODClient library requires the .NET 4.5.
         {"entity_type", "people_eng,places_eng"}
     }
 
->iodApp: a string to identify an IDOL OnDemand API. E.g. “ocrdocument”. Current supported apps are listed in the IODApps class.
+* iodApp: a string to identify an IDOL OnDemand API. E.g. “ocrdocument”. Current supported apps are listed in the IODApps class.
 
->mode [REQ_MODE.SYNC | REQ_MODE.ASYNC]: specifies API call as Asynchronous or Synchronous.
+* mode [REQ_MODE.SYNC | REQ_MODE.ASYNC]: specifies API call as Asynchronous or Synchronous.
 
 *Return: void.*
 
-**Response:**
-* If the mode is “ASYNC”, response will be returned via the requestCompletedWithJobID(String response) callback function.
-* If the mode is “SYNC”, response will be returned via the requestCompletedWithContent(String response) callback function.
+*Response:*
+* If the mode is "ASYNC", response will be returned via the requestCompletedWithJobID(String response) callback function.
+* If the mode is "SYNC", response will be returned via the requestCompletedWithContent(String response) callback function.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
 
 **GetJobResult(String jobID)**
@@ -90,10 +90,10 @@ IODClient library requires the .NET 4.5.
 >Sends a request to IDOL OnDemand to retrieve the content identified by the jobID.
 
 **Parameter:**
->jobID: the jobID returned from an IDOL OnDemand API upon an asynchronous call.
+* jobID: the jobID returned from an IDOL OnDemand API upon an asynchronous call.
 
-**Response:** 
->Response will be returned via the requestCompletedWithContent(String response)
+*Response:* 
+* Response will be returned via the requestCompletedWithContent(String response)
 
 ---
 ## Demo code 1: 
