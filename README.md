@@ -14,7 +14,7 @@ IODClient library requires the .NET 4.5.
 2. Create a new or open an existing Windows project
 3. Add the IODClient.dll to the project.
 
-![alt tag](https://github.com/PacoVu/IODClientForWindowsUniversal/images/importlibrary1.jpg)
+![alt tag](/images/importlibrary1.jpg)
 
 4. Browse to the folder where you saved the library and select the IODClient.dll.
 
@@ -73,8 +73,8 @@ IODClient library requires the .NET 4.5.
 
 >Note:
 
-1. In the case of the "file" parameter, the value must be a StorageFile object.
-2. In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary\<String,String\> object with the key is the parameter name and the values separated by commas “,”. E.g.:
+> 1. In the case of the "file" parameter, the value must be a StorageFile object.
+> 2. In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary\<String,String\> object with the key is the parameter name and the values separated by commas “,”. E.g.:
 
 >E.g.:
 ## 
