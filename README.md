@@ -105,7 +105,7 @@ IODClient library requires the .NET 4.5.
 
 ----
 ## API callback functions
-* You will need to implement callback functions to receive response from the server
+* You will need to implement callback functions to receive responses from the server
 
     iodClient.requestCompletedWithContent += IodClient_requestCompletedWithContent;
     iodClient.requestCompletedWithJobID += IodClient_requestCompletedWithJobID;
@@ -113,24 +113,15 @@ IODClient library requires the .NET 4.5.
 
 * When you call the GetRequest() or PostRequest() with the ASYNC mode, the response will be returned to this callback function. The response is a JSON string containing the jobID.
 
-    private void IodClient_requestCompletedWithJobID(string response)
-    {
-    
-    }
+>private void IodClient_requestCompletedWithJobID(string response){}
 
 * When you call the GetRequest() or PostRequest() with the SYNC mode, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
 
-    private void IodClient_requestCompletedWithContent(string response)
-    {
-    
-    }
+>private void IodClient_requestCompletedWithContent(string response){}
 
 * If there is an error occurred, the error message will be returned to this callback function.
 
-    private void IodClient_onErrorOccurred(string errorMessage)
-    {
-    
-    }
+> private void IodClient_onErrorOccurred(string errorMessage){}
 
 ----
 ## Demo code 1: 
