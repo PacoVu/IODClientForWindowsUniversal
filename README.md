@@ -19,7 +19,7 @@ IODClient library requires the .NET 4.5.
 **IODClient(string apiKey, String version="v1")**
 
 *Description:* 
->Constructor. Creates and initializes an IODClient object.
+* Constructor. Creates and initializes an IODClient object.
 
 *Parameters:*
 * apiKey: your developer apikey.
@@ -31,7 +31,7 @@ IODClient library requires the .NET 4.5.
 >Sends a GET request to an IDOL OnDemand API.
 
 *Parameters:*
->Params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API. 
+* Params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API. 
 
 >Note: 
 
@@ -44,13 +44,13 @@ IODClient library requires the .NET 4.5.
         {"entity_type", "people_eng,places_eng"}
     }
 
->iodApp: a string to identify an IDOL OnDemand API. E.g. “extractentities”. Current supported apps are listed in the IODApps class.
+* iodApp: a string to identify an IDOL OnDemand API. E.g. “extractentities”. Current supported apps are listed in the IODApps class.
 
->mode [REQ_MODE.ASYNC | REQ_MODE.SYNC]: specifies API call as Asynchronous or Synchronous.
+* mode [REQ_MODE.ASYNC | REQ_MODE.SYNC]: specifies API call as Asynchronous or Synchronous.
 
 *Return: void.*
 
-**Response:**
+*Response:*
 * If the mode is "ASYNC", response will be returned via the requestCompletedWithJobID(String response) callback function.
 * If the mode is "SYNC", response will be returned via the requestCompletedWithContent(String response) callback function.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
