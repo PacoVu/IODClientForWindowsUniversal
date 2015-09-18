@@ -32,18 +32,18 @@ IODClient library requires the .NET 4.5.
             {
                 this.InitializeComponent();
                 
-		iodClient.requestCompletedWithContent += IodClient_requestCompletedWithContent;
+                iodClient.requestCompletedWithContent += IodClient_requestCompletedWithContent;
                 iodClient.requestCompletedWithJobID += IodClient_requestCompletedWithJobID;
                 iodClient.onErrorOccurred += IodClient_onErrorOccurred;
 
-		useIODClient();
+                useIODClient();
             }
 
             private void useIODClient()
             {
                 String iodApp = IODApps.ENTITY_EXTRACTION;
                 
-		var arrays = new Dictionary<String, String>
+                var arrays = new Dictionary<String, String>
                 {
                     {"entity_type", "people_eng,places_eng"}
                 };
@@ -51,8 +51,8 @@ IODClient library requires the .NET 4.5.
                 var Params = new Dictionary<string, object>
                 {
                     { "url", "http://www.cnn.com" },
-		    { "arrays", arrays },
-		    { "unique_entities", "true" }
+                    { "arrays", arrays },
+                    { "unique_entities", "true" }
                 };
 
                 iodClient.GetRequest(ref Params, iodApp, IODClient.REQ_MODE.ASYNC);
@@ -63,8 +63,8 @@ IODClient library requires the .NET 4.5.
             {
                 JsonValue root;
                 JsonObject jsonObj;
-		String people = "";
-		String places = "";
+                String people = "";
+                String places = "";
                 bool ret = JsonValue.TryParse(response, out root);
                 if (ret)
                 {
@@ -76,18 +76,18 @@ IODClient library requires the .NET 4.5.
                         {
                             var entityObj = entity.GetObject();
                             var type = entityObj.GetNamedString("type");
-			    if (type == "people_eng")
-			    {
+                            if (type == "people_eng")
+                            {
                                 people += entityObj.GetNamedString("original_text") + System.Environment.NewLine;
-				// parse any other interested information about a people
-			    }
-			    else if (type == "places_eng")
-			    {
+                                // parse any other interested information about a people
+                            }
+                            else if (type == "places_eng")
+                            {
                                 places += entityObj.GetNamedString("original_text") + System.Environment.NewLine;
-				// parse any other interested information about a place
-			    }
-			}
-		    }
+                                // parse any other interested information about a place
+                            }
+                        }
+                    }
                 }
             }
 
@@ -116,22 +116,23 @@ IODClient library requires the .NET 4.5.
             {
                 this.InitializeComponent();
                 
-		iodClient.requestCompletedWithContent += IodClient_requestCompletedWithContent;
+                iodClient.requestCompletedWithContent += IodClient_requestCompletedWithContent;
                 iodClient.requestCompletedWithJobID += IodClient_requestCompletedWithJobID;
                 iodClient.onErrorOccurred += IodClient_onErrorOccurred;
 
-		useIODClient();
+                useIODClient();
             }
 
             private void useIODClient()
             {
                 String iodApp = IODApps.OCR_DOCUMENT;
-		StorageFile imgFile = 
+                StorageFile imgFile = StorageFile.GetFileFromPathAsync("path/and/filename");
                 var Params = new Dictionary<string, object>
                 {
-                    {"file", imgFile},
-		    {"mode", "document_photo"}
+                    { "file", imgFile },
+                    { "mode", "document_photo" }
                 };
+
                 iodClient.PostRequest(ref Params, iodApp, IODClient.REQ_MODE.ASYNC);
             }
 
@@ -175,13 +176,14 @@ IODClient library requires the .NET 4.5.
                                         if (obj.ContainsKey("text"))
                                             recognizedText += obj.GetNamedString("text");
                                     }
+                                }
                             }
                         }
                     }
                 }
             }
 
-	    private void IodClient_onErrorOccurred(string errorMessage)
+            private void IodClient_onErrorOccurred(string errorMessage)
             {
                 // handle error if any
             }
