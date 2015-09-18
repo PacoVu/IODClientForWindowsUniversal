@@ -13,11 +13,11 @@ IODClient library requires the .NET 4.5.
 1. Click the "Download Zip" button to download the IODClient.dll library for Windows Universal 8.1.
 2. Create a new or open an existing Windows project
 3. Add the IODClient.dll to the project.
-![alt Figure 1](https://github.com/PacoVu/IODClientForWindowsUniversal/images/importlibrary1.jpg)
+![alt Figure 1](https://raw.github.com/PacoVu/IODClientForWindowsUniversal/images/importlibrary1.jpg)
 
 4. Browse to the folder where you saved the library and select the IODClient.dll.
 
-![alt Figure 2](https://github.com/PacoVu/IODClientForWindowsUniversal/images/importlibrary2.jpg)
+![alt Figure 2](https://raw.github.com/PacoVu/IODClientForWindowsUniversal/images/importlibrary2.jpg)
 
 ----
 ## API References
