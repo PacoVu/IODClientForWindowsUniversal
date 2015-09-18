@@ -25,6 +25,7 @@ IODClient library requires the .NET 4.5.
 * apiKey: your developer apikey.
 * version: IDOL OnDemand API version. Currently it only supports version 1. Thus, the default value is “v1”.
 
+----
 **GetRequest(ref Dictionary\<String, Object\> Params, String iodApp, REQ_MODE mode)**
 
 *Description:* 
@@ -55,6 +56,7 @@ IODClient library requires the .NET 4.5.
 * If the mode is "SYNC", response will be returned via the requestCompletedWithContent(String response) callback function.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
 
+----
 **PostRequest(ref Dictionary\<String, Object\> Params, String iodApp, REQ_MODE mode)**
 
 *Description:* 
@@ -63,11 +65,13 @@ IODClient library requires the .NET 4.5.
 *Parameters:*
 * Params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API
 
->Note: 
+>Note:
+
 1. In the case of the "file" parameter, the value must be a StorageFile object.
 2. In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary\<String,String\> object with the key is the parameter name and the values separated by commas “,”. E.g.:
 
 >E.g.:
+##
     var entity_array = new Dictionary<String, String>
     {
         {"entity_type", "people_eng,places_eng"}
@@ -84,10 +88,11 @@ IODClient library requires the .NET 4.5.
 * If the mode is "SYNC", response will be returned via the requestCompletedWithContent(String response) callback function.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
 
+----
 **GetJobResult(String jobID)**
 
 *Description:*
->Sends a request to IDOL OnDemand to retrieve the content identified by the jobID.
+* Sends a request to IDOL OnDemand to retrieve the content identified by the jobID.
 
 **Parameter:**
 * jobID: the jobID returned from an IDOL OnDemand API upon an asynchronous call.
