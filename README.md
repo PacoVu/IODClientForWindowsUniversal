@@ -26,7 +26,7 @@ IODClient library requires the .NET 4.5.
 
 *Parameters:*
 * apiKey: your developer apikey.
-* version: IDOL OnDemand API version. Currently it only supports version 1. Thus, the default value is “v1”.
+* version: IDOL OnDemand API version. Currently it only supports version 1. Thus, the default value is "v1".
 
 ----
 **GetRequest(ref Dictionary\<String, Object\> Params, String iodApp, REQ_MODE mode)**
@@ -48,7 +48,7 @@ IODClient library requires the .NET 4.5.
         {"entity_type", "people_eng,places_eng"}
     }
 
-* iodApp: a string to identify an IDOL OnDemand API. E.g. “extractentities”. Current supported apps are listed in the IODApps class.
+* iodApp: a string to identify an IDOL OnDemand API. E.g. "extractentities". Current supported apps are listed in the IODApps class.
 
 * mode [REQ_MODE.ASYNC | REQ_MODE.SYNC]: specifies API call as Asynchronous or Synchronous.
 
@@ -71,7 +71,7 @@ IODClient library requires the .NET 4.5.
 >Note:
 
 > 1. In the case of the "file" parameter, the value must be a StorageFile object.
-> 2. In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary\<String,String\> object with the key is the parameter name and the values separated by commas “,”. E.g.:
+> 2. In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary\<String,String\> object with the key is the parameter name and the values separated by commas ",".
 
 >E.g.:
 ## 
@@ -80,7 +80,7 @@ IODClient library requires the .NET 4.5.
         {"entity_type", "people_eng,places_eng"}
     }
 
-* iodApp: a string to identify an IDOL OnDemand API. E.g. “ocrdocument”. Current supported apps are listed in the IODApps class.
+* iodApp: a string to identify an IDOL OnDemand API. E.g. "ocrdocument". Current supported apps are listed in the IODApps class.
 
 * mode [REQ_MODE.SYNC | REQ_MODE.ASYNC]: specifies API call as Asynchronous or Synchronous.
 
@@ -105,7 +105,7 @@ IODClient library requires the .NET 4.5.
 
 ----
 ## API callback functions
-You will need to implement callback functions to receive responses from the server*
+You will need to implement callback functions to receive responses from the server
 
     iodClient.requestCompletedWithContent += IodClient_requestCompletedWithContent;
     iodClient.requestCompletedWithJobID += IodClient_requestCompletedWithJobID;
