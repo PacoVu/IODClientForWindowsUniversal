@@ -58,7 +58,19 @@ IODClient library requires the .NET 4.5.
                 iodClient.GetRequest(ref Params, iodApp, IODClient.REQ_MODE.ASYNC);
             }
 
-            
+            private void IodClient_requestCompletedWithJobID(string response)
+            {
+                JsonValue root;
+                JsonObject jsonObj;
+                bool ret = JsonValue.TryParse(response, out root);
+                if (ret)
+                {
+                    jsonObj = root.GetObject();
+                    String jobID = jsonObj.GetNamedString("jobID");
+                    iodClient.GetJobResult(jobID);
+                }
+            }
+
             private void IodClient_requestCompletedWithContent(string response)
             {
                 JsonValue root;
