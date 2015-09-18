@@ -10,9 +10,14 @@ IODClient library requires the .NET 4.5.
 
 ----
 ## Integrate IODClient into a Windows/Windows Phone project
-1. Download the IODClient.dll library for Windows Universal 8.1.
+1. Click the "Download Zip" button to download the IODClient.dll library for Windows Universal 8.1.
 2. Create a new or open an existing Windows project
-3. Add the IODClient.dll to the project. Browse to the folder where you saved the library and select the IODClient.dll.
+3. Add the IODClient.dll to the project.
+![alt Figure 1](https://raw.github.com/PacoVu/IODClientForWindowsUniversal/images/importlibrary1.jpg)
+
+4. Browse to the folder where you saved the library and select the IODClient.dll.
+
+![alt Figure 2](https://raw.github.com/PacoVu/IODClientForWindowsUniversal/images/importlibrary2.jpg)
 
 ----
 ## API References
@@ -71,7 +76,7 @@ IODClient library requires the .NET 4.5.
 2. In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary\<String,String\> object with the key is the parameter name and the values separated by commas “,”. E.g.:
 
 >E.g.:
-##
+## 
     var entity_array = new Dictionary<String, String>
     {
         {"entity_type", "people_eng,places_eng"}
@@ -94,7 +99,7 @@ IODClient library requires the .NET 4.5.
 *Description:*
 * Sends a request to IDOL OnDemand to retrieve the content identified by the jobID.
 
-**Parameter:**
+*Parameter:*
 * jobID: the jobID returned from an IDOL OnDemand API upon an asynchronous call.
 
 *Response:* 
@@ -103,7 +108,7 @@ IODClient library requires the .NET 4.5.
 ---
 ## Demo code 1: 
 
-**Use the Entity Extraction API to extract people and places from cnn.com website with a synchronous GET request**
+**Call the Entity Extraction API to extract people and places from cnn.com website with a synchronous GET request**
 
     using IOD.Client;
     
@@ -188,7 +193,7 @@ IODClient library requires the .NET 4.5.
 
 ## Demo code 2:
  
-**Use the OCR Document API to recognize text from an image with an asynchronous POST request**
+**Call the OCR Document API to recognize text from an image with an asynchronous POST request**
 
     using IOD.Client;
     
