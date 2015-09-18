@@ -58,6 +58,8 @@ IODClient library requires the .NET 4.5.
                 iodClient.GetRequest(ref Params, iodApp, IODClient.REQ_MODE.SYNC);
             }
 
+            // implement callback functions
+
             private void IodClient_requestCompletedWithContent(string response)
             {
                 JsonValue root;
@@ -134,7 +136,13 @@ IODClient library requires the .NET 4.5.
 
                 iodClient.PostRequest(ref Params, iodApp, IODClient.REQ_MODE.ASYNC);
             }
-
+            
+            // implement callback functions
+            
+            /************************************************************************************************
+	    * An async request will result in a response with a jobID. We parse the response to get the jobID 
+            * and send a request for the actual content identified by the jobID.
+	    ************************************************************************************************/ 
             private void IodClient_requestCompletedWithJobID(string response)
             {
                 JsonValue root;
