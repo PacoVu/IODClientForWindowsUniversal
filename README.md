@@ -19,17 +19,27 @@ IODClient library requires the .NET 4.5.
 
 ----
 ## API References
-**IODClient(string apiKey, String version="v1")**
+**Constructor**
+
+    IODClient(string apiKey, String version="v1")
 
 *Description:* 
-* Constructor. Creates and initializes an IODClient object.
+* Creates and initializes an IODClient object.
 
 *Parameters:*
 * apiKey: your developer apikey.
 * version: IDOL OnDemand API version. Currently it only supports version 1. Thus, the default value is "v1".
 
+*Example code:*
+
+    using IOD.Client;
+    
+    IODClient iodClient = new IODClient("your-api-key");
+
 ----
-**GetRequest(ref Dictionary\<String, Object\> Params, String iodApp, REQ_MODE mode)**
+**Function GetRequest**
+
+    void GetRequest(ref Dictionary\<String, Object\> Params, String iodApp, REQ_MODE mode)
 
 *Description:* 
 * Sends a GET request to an IDOL OnDemand API.
@@ -52,15 +62,30 @@ IODClient library requires the .NET 4.5.
 
 * mode [REQ_MODE.ASYNC | REQ_MODE.SYNC]: specifies API call as Asynchronous or Synchronous.
 
-*Return: void.*
-
 *Response:*
 * If the mode is "ASYNC", response will be returned via the requestCompletedWithJobID(String response) callback function.
 * If the mode is "SYNC", response will be returned via the requestCompletedWithContent(String response) callback function.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
 
+*Example code:*
+    Call the Entity Extraction API to find people and places from CNN website
+
+    String iodApp = IODApps.ENTITY_EXTRACTION;
+    var arrays = new Dictionary<String, String>
+    {
+        {"entity_type", "people_eng,places_eng"}
+    }
+    var Params = new Dictionary<String, Object> 
+    { 
+        {"url", "http://www.cnn.com"},
+        {"arrays", arrays}
+    };
+    iodClient.GetRequest(ref Params, iodApp, IODClient.REQ_MODE.SYNC);
+
 ----
-**PostRequest(ref Dictionary\<String, Object\> Params, String iodApp, REQ_MODE mode)**
+**Function PostRequest**
+
+    void PostRequest(ref Dictionary\<String, Object\> Params, String iodApp, REQ_MODE mode)
 
 *Description:* 
 * Sends a POST request to an IDOL OnDemand API.
@@ -84,15 +109,27 @@ IODClient library requires the .NET 4.5.
 
 * mode [REQ_MODE.SYNC | REQ_MODE.ASYNC]: specifies API call as Asynchronous or Synchronous.
 
-*Return: void.*
-
 *Response:*
 * If the mode is "ASYNC", response will be returned via the requestCompletedWithJobID(String response) callback function.
 * If the mode is "SYNC", response will be returned via the requestCompletedWithContent(String response) callback function.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
 
+*Example code:*
+    Call the OCR Document API to scan text from an image file
+
+    String iodApp = IODApps.OCR_DOCUMENT;
+    StorageFile file = await StorageFile.GetFileFromPathAsync("c:\image.jpg");
+    var Params =  new Dictionary<String,Object>
+    {
+        {"file", file},
+        {"mode", "document_photo"}
+    };
+    iodClient.PostRequest(ref Params, iodApp, IODClient.REQ_MODE.ASYNC);
+
 ----
-**GetJobResult(String jobID)**
+**Function GetJobResult**
+
+    void GetJobResult(String jobID)
 
 *Description:*
 * Sends a request to IDOL OnDemand to retrieve the content identified by the jobID.
@@ -103,9 +140,24 @@ IODClient library requires the .NET 4.5.
 *Response:* 
 * Response will be returned via the requestCompletedWithContent(String response)
 
+*Example code:*
+    Parse a JSON string contained a jobID and call the function to get the actual content from IDOL OnDemand server 
+
+    void iodClient_requestCompletedWithJobID(string response)
+    {
+        JsonValue root;
+        JsonObject jsonObject;
+        if (JsonValue.TryParse(response, out root))
+        {
+            jsonObject = root.GetObject();
+            string jobId = jsonObject.GetNamedString("jobID");
+            iodClient.GetJobResult(jobId);
+        }
+    }
+
 ----
 ## API callback functions
-You will need to implement callback functions to receive responses from the server
+You will need to implement callback functions to receive responses from IDOL OnDemand server
 
     iodClient.requestCompletedWithContent += IodClient_requestCompletedWithContent;
     iodClient.requestCompletedWithJobID += IodClient_requestCompletedWithJobID;
@@ -113,15 +165,26 @@ You will need to implement callback functions to receive responses from the serv
 # 
 When you call the GetRequest() or PostRequest() with the ASYNC mode, the response will be returned to this callback function. The response is a JSON string containing the jobID.
 
-**private void IodClient_requestCompletedWithJobID(string response){}**
+    private void IodClient_requestCompletedWithJobID(string response)
+    {
+    
+    }
 # 
+
 When you call the GetRequest() or PostRequest() with the SYNC mode, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
 
-**private void IodClient_requestCompletedWithContent(string response){}**
+    private void IodClient_requestCompletedWithContent(string response)
+    {
+    
+    }
 # 
+
 If there is an error occurred, the error message will be returned to this callback function.
 
-**private void IodClient_onErrorOccurred(string errorMessage){}**
+    private void IodClient_onErrorOccurred(string errorMessage)
+    {
+    
+    }
 
 ----
 ## Demo code 1: 
