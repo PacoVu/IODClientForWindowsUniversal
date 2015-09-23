@@ -39,7 +39,7 @@ IODClient library requires the .NET 4.5.
 ----
 **Function GetRequest**
 
-    void GetRequest(ref Dictionary\<String, Object\> Params, String iodApp, REQ_MODE mode)
+    void GetRequest(ref Dictionary<String, Object> Params, String iodApp, REQ_MODE mode)
 
 *Description:* 
 * Sends a GET request to an IDOL OnDemand API.
@@ -85,7 +85,7 @@ IODClient library requires the .NET 4.5.
 ----
 **Function PostRequest**
 
-    void PostRequest(ref Dictionary\<String, Object\> Params, String iodApp, REQ_MODE mode)
+    void PostRequest(ref Dictionary<String, Object> Params, String iodApp, REQ_MODE mode)
 
 *Description:* 
 * Sends a POST request to an IDOL OnDemand API.
