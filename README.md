@@ -1,51 +1,51 @@
-# IODClient Library for Windows Universal 8.1. V1.0
+# HODClient Library for Windows Universal 8.1. V1.0
 
 ----
 ## Overview
-IODClient library for Windows Universal is a lightweight C# based API, which helps you easily integrate your Windows app with HP IDOL OnDemand Services.
+HODClient library for Windows Universal is a lightweight C# based API, which helps you easily integrate your Windows app with HP Haven OnDemand Services.
 
-IODClient library supports both Windows and Windows Phone 8.1.
+HODClient library supports both Windows and Windows Phone 8.1.
 
-IODClient library requires the .NET 4.5.
+HODClient library requires the .NET 4.5.
 
 ----
-## Integrate IODClient into a Windows/Windows Phone project
-1. Click the "Download Zip" button to download the IODClient.dll library for Windows Universal 8.1.
+## Integrate HODClient into a Windows/Windows Phone project
+1. Click the "Download Zip" button to download the HODClient library for Windows Universal 8.1.
 2. Create a new or open an existing Windows project
-3. Add the IODClient.dll to the project.
+3. Right click on the project's References folder and select "Add reference...".
 >![](/images/importlibrary1.jpg)
-4. Browse to the folder where you saved the library and select the IODClient.dll.
+4. Browse to the folder where you saved the library and select the HODClient.dll.
 >![](/images/importlibrary2.jpg)
 
 ----
 ## API References
 **Constructor**
 
-    IODClient(string apiKey, String version="v1")
+    HODClient(string apiKey, String version="v1")
 
 *Description:* 
-* Creates and initializes an IODClient object.
+* Creates and initializes an HODClient object.
 
 *Parameters:*
 * apiKey: your developer apikey.
-* version: IDOL OnDemand API version. Currently it only supports version 1. Thus, the default value is "v1".
+* version: Haven OnDemand API version. Currently it only supports version 1. Thus, the default value is "v1".
 
 *Example code:*
 
-    using IOD.Client;
+    using HOD.Client;
     
-    IODClient iodClient = new IODClient("your-api-key");
+    HODClient hodClient = new HODClient("your-api-key");
 
 ----
 **Function GetRequest**
 
-    void GetRequest(ref Dictionary<String, Object> Params, String iodApp, REQ_MODE mode)
+    void GetRequest(ref Dictionary<String, Object> Params, String hodApp, REQ_MODE mode)
 
 *Description:* 
-* Sends a GET request to an IDOL OnDemand API.
+* Sends a HTTP GET request to a Haven OnDemand API.
 
 *Parameters:*
-* Params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API. 
+* Params: a Dictionary object containing key/value pair parameters to be sent to a Haven OnDemand API, where the keys are the parameters of that API. 
 
 >Note: 
 
@@ -58,7 +58,7 @@ IODClient library requires the .NET 4.5.
         {"entity_type", "people_eng,places_eng"}
     }
 
-* iodApp: a string to identify an IDOL OnDemand API. E.g. "extractentities". Current supported apps are listed in the IODApps class.
+* hodApp: a string to identify a Haven OnDemand API. E.g. "extractentities". Current supported apps are listed in the HODApps class.
 
 * mode [REQ_MODE.ASYNC | REQ_MODE.SYNC]: specifies API call as Asynchronous or Synchronous.
 
@@ -70,7 +70,7 @@ IODClient library requires the .NET 4.5.
 *Example code:*
     Call the Entity Extraction API to find people and places from CNN website
 
-    String iodApp = IODApps.ENTITY_EXTRACTION;
+    String hodApp = HODApps.ENTITY_EXTRACTION;
     var arrays = new Dictionary<String, String>
     {
         {"entity_type", "people_eng,places_eng"}
@@ -80,18 +80,18 @@ IODClient library requires the .NET 4.5.
         {"url", "http://www.cnn.com"},
         {"arrays", arrays}
     };
-    iodClient.GetRequest(ref Params, iodApp, IODClient.REQ_MODE.SYNC);
+    hodClient.GetRequest(ref Params, hodApp, HODClient.REQ_MODE.SYNC);
 
 ----
 **Function PostRequest**
 
-    void PostRequest(ref Dictionary<String, Object> Params, String iodApp, REQ_MODE mode)
+    void PostRequest(ref Dictionary<String, Object> Params, String hodApp, REQ_MODE mode)
 
 *Description:* 
-* Sends a POST request to an IDOL OnDemand API.
+* Sends a HTTP POST request to a Haven OnDemand API.
 
 *Parameters:*
-* Params: a Dictionary object containing key/value pair parameters to be sent to an IDOL OnDemand API, where the keys are the parameters of an IDOL OnDemand API
+* Params: a Dictionary object containing key/value pair parameters to be sent to a Haven OnDemand API, where the keys are the parameters of that API
 
 >Note:
 
@@ -105,7 +105,7 @@ IODClient library requires the .NET 4.5.
         {"entity_type", "people_eng,places_eng"}
     }
 
-* iodApp: a string to identify an IDOL OnDemand API. E.g. "ocrdocument". Current supported apps are listed in the IODApps class.
+* hodApp: a string to identify a Haven OnDemand API. E.g. "ocrdocument". Current supported apps are listed in the HODApps class.
 
 * mode [REQ_MODE.SYNC | REQ_MODE.ASYNC]: specifies API call as Asynchronous or Synchronous.
 
@@ -117,14 +117,14 @@ IODClient library requires the .NET 4.5.
 *Example code:*
     Call the OCR Document API to scan text from an image file
 
-    String iodApp = IODApps.OCR_DOCUMENT;
+    String hodApp = HODApps.OCR_DOCUMENT;
     StorageFile file = await StorageFile.GetFileFromPathAsync("c:\image.jpg");
     var Params =  new Dictionary<String,Object>
     {
         {"file", file},
         {"mode", "document_photo"}
     };
-    iodClient.PostRequest(ref Params, iodApp, IODClient.REQ_MODE.ASYNC);
+    hodClient.PostRequest(ref Params, hodApp, HODClient.REQ_MODE.ASYNC);
 
 ----
 **Function GetJobResult**
@@ -132,18 +132,18 @@ IODClient library requires the .NET 4.5.
     void GetJobResult(String jobID)
 
 *Description:*
-* Sends a request to IDOL OnDemand to retrieve the content identified by the jobID.
+* Sends a request to Haven OnDemand to retrieve content identified by the jobID.
 
 *Parameter:*
-* jobID: the jobID returned from an IDOL OnDemand API upon an asynchronous call.
+* jobID: the jobID returned from a Haven OnDemand API upon an asynchronous call.
 
 *Response:* 
 * Response will be returned via the requestCompletedWithContent(String response)
 
 *Example code:*
-    Parse a JSON string contained a jobID and call the function to get the actual content from IDOL OnDemand server 
+    Parse a JSON string contained a jobID and call the function to get the actual content from Haven OnDemand server 
 
-    void iodClient_requestCompletedWithJobID(string response)
+    void hodClient_requestCompletedWithJobID(string response)
     {
         JsonValue root;
         JsonObject jsonObject;
@@ -151,21 +151,21 @@ IODClient library requires the .NET 4.5.
         {
             jsonObject = root.GetObject();
             string jobId = jsonObject.GetNamedString("jobID");
-            iodClient.GetJobResult(jobId);
+            hodClient.GetJobResult(jobId);
         }
     }
 
 ----
 ## API callback functions
-You will need to implement callback functions to receive responses from IDOL OnDemand server
+You will need to implement callback functions to receive responses from Haven OnDemand server
 
-    iodClient.requestCompletedWithContent += IodClient_requestCompletedWithContent;
-    iodClient.requestCompletedWithJobID += IodClient_requestCompletedWithJobID;
-    iodClient.onErrorOccurred += IodClient_onErrorOccurred;
+    hodClient.requestCompletedWithContent += HodClient_requestCompletedWithContent;
+    hodClient.requestCompletedWithJobID += HodClient_requestCompletedWithJobID;
+    hodClient.onErrorOccurred += HodClient_onErrorOccurred;
 # 
-When you call the GetRequest() or PostRequest() with the ASYNC mode, the response will be returned to this callback function. The response is a JSON string containing the jobID.
+When you call the GetRequest() or PostRequest() with the ASYNC mode, or call the GetJobResult() function, the response will be returned to this callback function. The response is a JSON string containing the jobID.
 
-    private void IodClient_requestCompletedWithJobID(string response)
+    private void HodClient_requestCompletedWithJobID(string response)
     {
     
     }
@@ -173,7 +173,7 @@ When you call the GetRequest() or PostRequest() with the ASYNC mode, the respons
 
 When you call the GetRequest() or PostRequest() with the SYNC mode, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
 
-    private void IodClient_requestCompletedWithContent(string response)
+    private void HodClient_requestCompletedWithContent(string response)
     {
     
     }
@@ -181,7 +181,7 @@ When you call the GetRequest() or PostRequest() with the SYNC mode, the response
 
 If there is an error occurred, the error message will be returned to this callback function.
 
-    private void IodClient_onErrorOccurred(string errorMessage)
+    private void HodClient_onErrorOccurred(string errorMessage)
     {
     
     }
@@ -191,28 +191,28 @@ If there is an error occurred, the error message will be returned to this callba
 
 **Call the Entity Extraction API to extract people and places from cnn.com website with a synchronous GET request**
 
-    using IOD.Client;
+    using HOD.Client;
     
-    namespace IODClientDemo
+    namespace HODClientDemo
     {
         public sealed partial class MainPage : Page
         {
-            IODClient iodClient = new IODClient("your-apikey");
+            HODClient hodClient = new HODClient("your-apikey");
 
             public MainPage()
             {
                 this.InitializeComponent();
                 
-                iodClient.requestCompletedWithContent += IodClient_requestCompletedWithContent;
-                iodClient.requestCompletedWithJobID += IodClient_requestCompletedWithJobID;
-                iodClient.onErrorOccurred += IodClient_onErrorOccurred;
+                hodClient.requestCompletedWithContent += HodClient_requestCompletedWithContent;
+                hodClient.requestCompletedWithJobID += HodClient_requestCompletedWithJobID;
+                hodClient.onErrorOccurred += HodClient_onErrorOccurred;
 
-                useIODClient();
+                useHODClient();
             }
 
-            private void useIODClient()
+            private void useHODClient()
             {
-                String iodApp = IODApps.ENTITY_EXTRACTION;
+                String hodApp = HODApps.ENTITY_EXTRACTION;
                 
                 var arrays = new Dictionary<String, String>
                 {
@@ -226,12 +226,12 @@ If there is an error occurred, the error message will be returned to this callba
                     { "unique_entities", "true" }
                 };
 
-                iodClient.GetRequest(ref Params, iodApp, IODClient.REQ_MODE.SYNC);
+                hodClient.GetRequest(ref Params, hodApp, HODClient.REQ_MODE.SYNC);
             }
 
             // implement callback functions
 
-            private void IodClient_requestCompletedWithContent(string response)
+            private void HodClient_requestCompletedWithContent(string response)
             {
                 JsonValue root;
                 JsonObject jsonObj;
@@ -263,7 +263,7 @@ If there is an error occurred, the error message will be returned to this callba
                 }
             }
 
-	    private void IodClient_onErrorOccurred(string errorMessage)
+	    private void HodClient_onErrorOccurred(string errorMessage)
             {
                 // handle error if any
             }
@@ -276,28 +276,28 @@ If there is an error occurred, the error message will be returned to this callba
  
 **Call the OCR Document API to recognize text from an image with an asynchronous POST request**
 
-    using IOD.Client;
+    using HOD.Client;
     
-    namespace IODClientDemo
+    namespace HODClientDemo
     {
         public sealed partial class MainPage : Page
         {
-            IODClient iodClient = new IODClient("your-apikey");
+            HODClient iodClient = new HODClient("your-apikey");
 
             public MainPage()
             {
                 this.InitializeComponent();
                 
-                iodClient.requestCompletedWithContent += IodClient_requestCompletedWithContent;
-                iodClient.requestCompletedWithJobID += IodClient_requestCompletedWithJobID;
-                iodClient.onErrorOccurred += IodClient_onErrorOccurred;
+                hodClient.requestCompletedWithContent += HodClient_requestCompletedWithContent;
+                hodClient.requestCompletedWithJobID += HodClient_requestCompletedWithJobID;
+                hodClient.onErrorOccurred += HodClient_onErrorOccurred;
 
-                useIODClient();
+                useHODClient();
             }
 
-            private void useIODClient()
+            private void useHODClient()
             {
-                String iodApp = IODApps.OCR_DOCUMENT;
+                String hodApp = hODApps.OCR_DOCUMENT;
                 StorageFile imgFile = StorageFile.GetFileFromPathAsync("path/and/filename");
                 var Params = new Dictionary<string, object>
                 {
@@ -305,7 +305,7 @@ If there is an error occurred, the error message will be returned to this callba
                     { "mode", "document_photo" }
                 };
 
-                iodClient.PostRequest(ref Params, iodApp, IODClient.REQ_MODE.ASYNC);
+                hodClient.PostRequest(ref Params, hodApp, HODClient.REQ_MODE.ASYNC);
             }
             
             // implement callback functions
@@ -314,7 +314,7 @@ If there is an error occurred, the error message will be returned to this callba
             * An async request will result in a response with a jobID. We parse the response to get
             * the jobID and send a request for the actual content identified by the jobID.
             **************************************************************************************/ 
-            private void IodClient_requestCompletedWithJobID(string response)
+            private void HodClient_requestCompletedWithJobID(string response)
             {
                 JsonValue root;
                 JsonObject jsonObj;
@@ -323,11 +323,11 @@ If there is an error occurred, the error message will be returned to this callba
                 {
                     jsonObj = root.GetObject();
                     String jobID = jsonObj.GetNamedString("jobID");
-                    iodClient.GetJobResult(jobID);
+                    hodClient.GetJobResult(jobID);
                 }
             }
 
-            private void IodClient_requestCompletedWithContent(string response)
+            private void HodClient_requestCompletedWithContent(string response)
             {
                 // response is a json string from server
                 JsonValue root;
@@ -361,7 +361,7 @@ If there is an error occurred, the error message will be returned to this callba
                 }
             }
 
-            private void IodClient_onErrorOccurred(string errorMessage)
+            private void HodClient_onErrorOccurred(string errorMessage)
             {
                 // handle error if any
             }
