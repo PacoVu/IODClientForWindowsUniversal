@@ -351,7 +351,7 @@ namespace HODClientDemo
             
         }            
         
-	// implement callback functions
+        // implement callback functions
             
         /**************************************************************************************
         * An async request will result in a response with a jobID. We parse the response to get
