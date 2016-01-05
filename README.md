@@ -365,10 +365,10 @@ void hodClient_requestCompletedWithContent(string response)
 
 *Description:* 
 * Parses a json string and returns a custom object type based on the T class.
->Note: .
+
 
 *Parameters:*
-* <T>: a custom class object.
+* \<T\>: a custom class object.
 * jsonStr: a json string returned from a synchronous API call or from the GetJobResult function.
 
 *Return value:*
