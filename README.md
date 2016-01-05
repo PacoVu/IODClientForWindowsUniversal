@@ -209,7 +209,7 @@ void hodClient_requestCompletedWithJobID(string response)
 {
     string jobID = parser.ParseJobID(response);
     if (jobID != "")    
-	hodClient.GetJobStatus(jobId);
+        hodClient.GetJobStatus(jobId);
 }
 
 private void HodClient_requestCompletedWithContent(string response)
@@ -296,7 +296,7 @@ void hodClient_requestCompletedWithJobID(string response)
     object ParseServerResponse(string hodApp, string jsonStr)
 
 *Description:* 
-* Parses a json string and returns an object type based on the API name (defined by hodApp).
+* Parses a json string and returns an object type based on the API name.
 
 >Note: Only APIs which return standard responses can be parsed by using this function. A list of supported APIs can be found from the SupportedApps class.
 
@@ -338,8 +338,13 @@ void hodClient_requestCompletedWithContent(string response)
             }
             else if (err.error == HODErrorCode.IN_PROGRESS)
             {
-                // Task is In Progress. Let's wait for some time then call GetJobStatus() gain
+                // Task is In Progress. Let's wait for some time then call GetJobStatus() again
                 hodClient.GetJobStatus(err.jobID);
+                break;
+            }
+            else if (err.error == HODErrorCode.NONSTANDARD_RESPONSE)
+            {
+                // The response is a non-standard response. Define a custom class and use the ParseCustomResponse<T>(response) function
                 break;
             }
             else // It is an error. Let's print out the error code, reason and detail
@@ -426,7 +431,7 @@ void hodClient_requestCompletedWithContent(string response)
             }
             else if (err.error == HODErrorCode.IN_PROGRESS)
             {
-                // Task is In Progress. Let's wait for some time then call GetJobStatus() gain
+                // Task is In Progress. Let's wait for some time then call GetJobStatus() again
                 hodClient.GetJobStatus(err.jobID);
                 break;
             }
@@ -557,7 +562,7 @@ namespace HODClientDemo
                     }
                     else if (err.error == HODErrorCode.IN_PROGRESS)
                     {
-                        // Task is In Progress. Let's wait for some time then call GetJobStatus() gain
+                        // Task is In Progress. Let's wait for some time then call GetJobStatus() again
                         hodClient.GetJobStatus(err.jobID);
                         break;
                     }
@@ -672,7 +677,7 @@ namespace HODClientDemo
                     }
                     else if (err.error == HODErrorCode.IN_PROGRESS)
                     {
-                        // Task is In Progress. Let's wait for some time then call GetJobStatus() gain
+                        // Task is In Progress. Let's wait for some time then call GetJobStatus() again
                         hodClient.GetJobStatus(err.jobID);
                         break;
                     }
