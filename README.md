@@ -42,7 +42,7 @@ HODClient library requires the .NET 4.5.
 
     HODClient hodClient = new HODClient("your-api-key");
 
-    HODResponseParser parser = new HODResponseParser; 
+    HODResponseParser parser = new HODResponseParser(); 
 
 ----
 **Function GetRequest**
@@ -194,7 +194,7 @@ void hodClient_requestCompletedWithJobID(string response)
 GetJobStatus(String jobID)
 ```
 *Description:*
-* Sends a request to Haven OnDemand to retrieve status of a job identified by a job ID. If the job is completed, the response will be the result of that job. Otherwise, the response will be None and the current status of the job will be held in the error object. 
+* Sends a request to Haven OnDemand to retrieve status of a job identified by a job ID. If the job is completed, the response will be the result of that job. Otherwise, the response will contain the current status of the job. 
 
 *Parameter:*
 * jobID: the job ID returned from an Haven OnDemand API upon an asynchronous call.
@@ -207,24 +207,19 @@ GetJobStatus(String jobID)
 ```
 void hodClient_requestCompletedWithJobID(string response)
 {
-    JsonValue root;
-    JsonObject jsonObject;
-    if (JsonValue.TryParse(response, out root))
-    {
-        jsonObject = root.GetObject();
-        string jobId = jsonObject.GetNamedString("jobID");
-        hodClient.GetJobStatus(jobId);
-    }
+    string jobID = parser.ParseJobID(response);
+    if (jobID != "")    
+	hodClient.GetJobStatus(jobId);
 }
 
 private void HodClient_requestCompletedWithContent(string response)
 {
-
+    // use the parser to parse the response
 }
 ``` 
 
 ## HODClient API callback functions
-You will need to implement callback functions to receive responses from Haven OnDemand server
+You will need to implement callback functions to receive responses from Haven OnDemand server.
 ```
 hodClient.requestCompletedWithContent += HodClient_requestCompletedWithContent;
 hodClient.requestCompletedWithJobID += HodClient_requestCompletedWithJobID;
@@ -238,7 +233,7 @@ private void HodClient_requestCompletedWithJobID(string response)
 }
 ``` 
 
-When you call the GetRequest() or PostRequest() with the SYNC mode, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
+When you call the GetRequest() or PostRequest() with the SYNC mode, or call the GetJobStatus() function, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
 ```
 private void HodClient_requestCompletedWithContent(string response)
 {
@@ -269,7 +264,7 @@ private void HodClient_onErrorOccurred(string errorMessage)
 
     using HOD.Response.Parser;
 
-    HODResponseParser parser = new HODResponseParser; 
+    HODResponseParser parser = new HODResponseParser(); 
 
 ----
 **Function ParseJobID**
@@ -302,14 +297,15 @@ void hodClient_requestCompletedWithJobID(string response)
 
 *Description:* 
 * Parses a json string and returns an object type based on the API name (defined by hodApp).
+
 >Note: Only APIs which return standard responses can be parsed by using this function. A list of supported APIs can be found from the SupportedApps class.
 
 *Parameters:*
-* hodApp: a string identify an HOD API. Detect supported APIs' responses from SupportedApps.
-* jsonStr: a json string returned from a synchronous API call or from the GetJobResult function.
+* hodApp: a string identify an HOD API. Supported APIs' standard responses are defined in the SupportedApps class. E.g. SupportedApps.RECOGNIZE_SPEECH.
+* jsonStr: a json string returned from a synchronous API call or from the GetJobResult or GetJobStatus function.
 
 *Return value:*
-* An object containing API's response values.
+* An object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the return object is null and the error or job status can be accessed by calling the GetLastError function.
 
 *Example code:*
 
@@ -371,7 +367,7 @@ void hodClient_requestCompletedWithContent(string response)
 * jsonStr: a json string returned from a synchronous API call or from the GetJobResult function.
 
 *Return value:*
-* An object containing API's response values.
+* An object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the return object is null and the error or job status can be accessed by calling the GetLastError function.
 
 *Example code:*
 
