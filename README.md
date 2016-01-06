@@ -225,7 +225,7 @@ hodClient.requestCompletedWithContent += HodClient_requestCompletedWithContent;
 hodClient.requestCompletedWithJobID += HodClient_requestCompletedWithJobID;
 hodClient.onErrorOccurred += HodClient_onErrorOccurred;
 ``` 
-When you call the GetRequest() or PostRequest() with the ASYNC mode, or call the GetJobResult() function, the response will be returned to this callback function. The response is a JSON string containing the jobID.
+When you call the GetRequest() or PostRequest() with the ASYNC mode, the response will be returned to this callback function. The response is a JSON string containing the jobID.
 ```
 private void HodClient_requestCompletedWithJobID(string response)
 {
@@ -233,7 +233,7 @@ private void HodClient_requestCompletedWithJobID(string response)
 }
 ``` 
 
-When you call the GetRequest() or PostRequest() with the SYNC mode, or call the GetJobStatus() function, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
+When you call the GetRequest() or PostRequest() with the SYNC mode, or call the GetJobResult() or GetJobStatus() function, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
 ```
 private void HodClient_requestCompletedWithContent(string response)
 {
@@ -305,7 +305,7 @@ void hodClient_requestCompletedWithJobID(string response)
 * jsonStr: a json string returned from a synchronous API call or from the GetJobResult or GetJobStatus function.
 
 *Return value:*
-* An object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the return object is null and the error or job status can be accessed by calling the GetLastError function.
+* An object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the returned object is null and the error or job status can be accessed by calling the GetLastError function.
 
 *Example code:*
 
@@ -372,7 +372,7 @@ void hodClient_requestCompletedWithContent(string response)
 * jsonStr: a json string returned from a synchronous API call or from the GetJobResult function.
 
 *Return value:*
-* An object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the return object is null and the error or job status can be accessed by calling the GetLastError function.
+* An object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the returned object is null and the error or job status can be accessed by calling the GetLastError function.
 
 *Example code:*
 
