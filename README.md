@@ -445,8 +445,51 @@ void hodClient_requestCompletedWithContent(string response)
     }
 }
 ```
-
 ---
+**Function GetLastError**
+
+    List<HODErrorObject> GetLastError()
+
+*Description:*
+ 
+* Get the latest error(s) if any happened during parsing the json string or HOD error returned from HOD server. > Note: The job "queued" or "in progress" status is also considered as an error situation. See the example below for how to detect and handle error status. 
+
+*Parameters:*
+
+* None.
+
+*Return value:*
+
+* An list object contains HODErrorObject
+
+*Example code:*
+
+```
+var errors = parser.GetLastError();
+foreach (HODErrorObject err in errors)
+{
+    if (err.error == HODErrorCode.QUEUED)
+    {
+        // Task is in queue. Let's wait for a few second then call GetJobStatus() again
+        hodClient.GetJobStatus(err.jobID);
+        break;
+    }
+    else if (err.error == HODErrorCode.IN_PROGRESS)
+    {
+        // Task is In Progress. Let's wait for some time then call GetJobStatus() again
+        hodClient.GetJobStatus(err.jobID);
+        break;
+    }
+    else 
+    {
+        // It is an error. Check error info and handle error accordingly
+	var result = err.error.ToString() + "\n";
+        result += err.reason + "\n";
+        result += err.detail + "\n";
+    }
+}
+```
+----
 ## Demo code 1: 
 
 **Call the Entity Extraction API to extract people and places from cnn.com website with a synchronous GET request**
@@ -696,6 +739,57 @@ namespace HODClientDemo
     }
 }
 ```
-
+----
+## Supported standard response classes
+```
+RecognizeSpeechResponse
+CancelConnectorResponse
+ConnectorHistoryResponse
+ConnectorStatusResponse
+CreateConnectorResponse
+DeleteConnectorResponse
+RetrieveConnectorConfigurationAttributeResponse
+RetrieveConnectorConfigurationFileResponse
+StartConnectorResponse
+StopConnectorResponse
+UpdateConnectorResponse
+ExpandContainerResponse
+StoreObjectResponse
+ViewDocumentResponse
+GetCommonNeighborsResponse
+GetNeighborsResponse
+GetNodesResponse
+GetShortestPathResponse
+GetSubgraphResponse
+SuggestLinksResponse
+SummarizeGraphResponse
+OCRDocumentResponse
+BarcodeRecognitionResponse
+FaceDetectionResponse
+ImageRecognitionResponse
+PredictResponse
+RecommendResponse
+TrainPredictionResponse
+CreateQueryProfileResponse
+DeleteQueryProfileResponse
+RetrieveQueryProfileResponse
+UpdateQueryProfileResponse
+FindRelatedConceptsResponse
+AutoCompleteResponse
+ConceptExtractionResponse
+ExpandTermsResponse
+HighlightTextResponse
+IdentifyLanguageResponse
+AnalyzeSentimentResponse
+TextTokenizationResponse
+AddToTextIndexResponse
+CreateTextIndexResponse
+DeleteTextIndexResponse
+DeleteFromTextIndexResponse
+IndexStatusResponse
+ListResourcesResponse
+RestoreTextIndexResponse
+```
+----
 ## License
 Licensed under the MIT License.
