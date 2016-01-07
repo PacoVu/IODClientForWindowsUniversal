@@ -483,7 +483,7 @@ foreach (HODErrorObject err in errors)
     else 
     {
         // It is an error. Check error info and handle error accordingly
-	var result = err.error.ToString() + "\n";
+        var result = err.error.ToString() + "\n";
         result += err.reason + "\n";
         result += err.detail + "\n";
     }
