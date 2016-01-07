@@ -298,10 +298,10 @@ void hodClient_requestCompletedWithJobID(string response)
 *Description:* 
 * Parses a json string and returns an object type based on the API name.
 
->Note: Only APIs which return standard responses can be parsed by using this function. A list of supported APIs can be found from the SupportedApps class.
+>Note: Only APIs which return standard responses can be parsed by using this function. A list of supported APIs can be found from the StandardResponse class.
 
 *Parameters:*
-* hodApp: a string identify an HOD API. Supported APIs' standard responses are defined in the SupportedApps class. E.g. SupportedApps.RECOGNIZE_SPEECH.
+* hodApp: a string identify an HOD API. Supported APIs' standard responses are defined in the StandardResponse class. E.g. StandardResponse.RECOGNIZE_SPEECH.
 * jsonStr: a json string returned from a synchronous API call or from the GetJobResult or GetJobStatus function.
 
 *Return value:*
@@ -313,7 +313,7 @@ void hodClient_requestCompletedWithJobID(string response)
 // 
 void hodClient_requestCompletedWithContent(string response)
 {
-    OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseServerResponse(SupportedApps.OCR_DOCUMENT, response);
+    OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseServerResponse(StandardResponse.OCR_DOCUMENT, response);
     if (resp != null)
     {
         string text = "";
@@ -653,7 +653,7 @@ namespace HODClientDemo
 
         private void HodClient_requestCompletedWithContent(string response)
         {
-            OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseServerResponse(SupportedApps.OCR_DOCUMENT, response);
+            OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseServerResponse(StandardResponse.OCR_DOCUMENT, response);
 	    if (resp != null)
 	    {
                 var text = "";

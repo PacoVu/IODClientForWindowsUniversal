@@ -43,19 +43,12 @@ namespace SpeechRecognition
 
         private void HodClient_requestCompletedWithJobID(string response)
         {
-            JsonValue root;
-            JsonObject jsonObj;
-            var ret = JsonValue.TryParse(response, out root);
-            if (ret)
-            {
-                jsonObj = root.GetObject();
-                if (jsonObj.ContainsKey("jobID"))
-                {
-                    HodClient_onErrorOccurred("get job status...");
-                    jobID = jsonObj.GetNamedString("jobID");
-                    hodClient.GetJobStatus(jobID);
-                }
-            }
+            
+            HodClient_onErrorOccurred("get job status...");
+            jobID = parser.ParseJobID(response);
+            if (jobID != "")
+                hodClient.GetJobStatus(jobID);
+         
         }
 
         async private void HodClient_requestCompletedWithContent(string response)
@@ -64,7 +57,7 @@ namespace SpeechRecognition
             {
                 jobID = "";
                 outputText.Blocks.Clear();
-                RecognizeSpeechResponse resp = (RecognizeSpeechResponse)parser.ParseServerResponse(HODApps.RECOGNIZE_SPEECH, response);
+                RecognizeSpeechResponse resp = (RecognizeSpeechResponse)parser.ParseServerResponse(StandardResponse.RECOGNIZE_SPEECH, response);
                 String text = "";
                 if (resp != null)
                 {
@@ -94,6 +87,12 @@ namespace SpeechRecognition
                             text = "In progress. Try again in 20 secs. Total waiting time: " + count.ToString();
                             timer.Interval = TimeSpan.FromSeconds(20);
                             timer.Start();
+                            break;
+                        }
+                        else if (err.error == HODErrorCode.NONSTANDARD_RESPONSE)
+                        {
+                            // The response is a non-standard response. Define a custom class and use the ParseCustomResponse<T>() function
+                            
                             break;
                         }
                         else
@@ -142,7 +141,7 @@ namespace SpeechRecognition
                 {"file", file },
                 {"interval", "20000" }
             };
-			HodClient_onErrorOccurred("Submit Speech Recognition request. Please wait.");
+            HodClient_onErrorOccurred("Submit Speech Recognition request. Please wait.");
             hodClient.PostRequest(ref Params, HODApps.RECOGNIZE_SPEECH, HODClient.REQ_MODE.ASYNC);
         }
 
