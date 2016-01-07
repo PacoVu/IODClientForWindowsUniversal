@@ -57,7 +57,7 @@ namespace SpeechRecognition
             {
                 jobID = "";
                 outputText.Blocks.Clear();
-                RecognizeSpeechResponse resp = (RecognizeSpeechResponse)parser.ParseServerResponse(StandardResponse.RECOGNIZE_SPEECH, response);
+                RecognizeSpeechResponse resp = (RecognizeSpeechResponse)parser.ParseStandardResponse(StandardResponse.RECOGNIZE_SPEECH, response);
                 String text = "";
                 if (resp != null)
                 {

@@ -291,9 +291,9 @@ void hodClient_requestCompletedWithJobID(string response)
 }
 ```
 ---
-**Function ParseServerResponse**
+**Function ParseStandardResponse**
 
-    object ParseServerResponse(string hodApp, string jsonStr)
+    object ParseStandardResponse(string hodApp, string jsonStr)
 
 *Description:* 
 * Parses a json string and returns an object type based on the API name.
@@ -313,7 +313,7 @@ void hodClient_requestCompletedWithJobID(string response)
 // 
 void hodClient_requestCompletedWithContent(string response)
 {
-    OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseServerResponse(StandardResponse.OCR_DOCUMENT, response);
+    OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseStandardResponse(StandardResponse.OCR_DOCUMENT, response);
     if (resp != null)
     {
         string text = "";
@@ -653,7 +653,7 @@ namespace HODClientDemo
 
         private void HodClient_requestCompletedWithContent(string response)
         {
-            OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseServerResponse(StandardResponse.OCR_DOCUMENT, response);
+            OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseStandardResponse(StandardResponse.OCR_DOCUMENT, response);
 	    if (resp != null)
 	    {
                 var text = "";
