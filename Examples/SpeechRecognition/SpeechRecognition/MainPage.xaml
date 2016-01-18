@@ -11,8 +11,6 @@
         <StackPanel Margin="0,40,0,0">
             <StackPanel Orientation="Horizontal">
                 <Button Name="SelectFileBtn" Content="Select Audio File" Click="LoadFilePicker"/>
-                <Button Name="SubmitBtn" IsEnabled="False" Content="Submit" Click="SubmitButton_Click"/>
-                
             </StackPanel>
             <ScrollViewer VerticalAlignment="Top" Height="600" Background="White">
                 <RichTextBlock Name="outputText" FontSize="26" TextWrapping="Wrap" />

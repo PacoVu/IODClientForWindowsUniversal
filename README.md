@@ -291,18 +291,17 @@ void hodClient_requestCompletedWithJobID(string response)
 }
 ```
 ---
-**Function ParseStandardResponse**
+**Function ParseSpeechRegconitionResponse**
 
-    object ParseStandardResponse(string hodApp, string jsonStr)
+    object ParseSpeechRegconitionResponse(ref string jsonStr)
 
 *Description:* 
-* Parses a json string and returns an object type based on the API name.
+* Parses a json string and returns a SpeechRegconitionResponse object.
 
->Note: Only APIs which return standard responses can be parsed by using this function. A list of supported APIs can be found from the StandardResponse class.
+>Note: See the full list of standard parser functions from the Standard response parser functions section at the end of this document.
 
 *Parameters:*
-* hodApp: a string identify an HOD API. Supported APIs' standard responses are defined in the StandardResponse class. E.g. StandardResponse.RECOGNIZE_SPEECH.
-* jsonStr: a json string returned from a synchronous API call or from the GetJobResult or GetJobStatus function.
+* jsonStr: a json string returned from a synchronous API call or from the GetJobResult or the GetJobStatus function.
 
 *Return value:*
 * An object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the returned object is null and the error or job status can be accessed by calling the GetLastError function.
@@ -313,7 +312,7 @@ void hodClient_requestCompletedWithJobID(string response)
 // 
 void hodClient_requestCompletedWithContent(string response)
 {
-    OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseStandardResponse(StandardResponse.OCR_DOCUMENT, response);
+    var resp = parser.ParseOCRDocumentResponse(ref response);
     if (resp != null)
     {
         string text = "";
@@ -740,55 +739,55 @@ namespace HODClientDemo
 }
 ```
 ----
-## Supported standard response classes
+## Standard response parser functions
 ```
-RecognizeSpeechResponse
-CancelConnectorResponse
-ConnectorHistoryResponse
-ConnectorStatusResponse
-CreateConnectorResponse
-DeleteConnectorResponse
-RetrieveConnectorConfigurationAttributeResponse
-RetrieveConnectorConfigurationFileResponse
-StartConnectorResponse
-StopConnectorResponse
-UpdateConnectorResponse
-ExpandContainerResponse
-StoreObjectResponse
-ViewDocumentResponse
-GetCommonNeighborsResponse
-GetNeighborsResponse
-GetNodesResponse
-GetShortestPathResponse
-GetSubgraphResponse
-SuggestLinksResponse
-SummarizeGraphResponse
-OCRDocumentResponse
-BarcodeRecognitionResponse
-FaceDetectionResponse
-ImageRecognitionResponse
-PredictResponse
-RecommendResponse
-TrainPredictionResponse
-CreateQueryProfileResponse
-DeleteQueryProfileResponse
-RetrieveQueryProfileResponse
-UpdateQueryProfileResponse
-FindRelatedConceptsResponse
-AutoCompleteResponse
-ConceptExtractionResponse
-ExpandTermsResponse
-HighlightTextResponse
-IdentifyLanguageResponse
-AnalyzeSentimentResponse
-TextTokenizationResponse
-AddToTextIndexResponse
-CreateTextIndexResponse
-DeleteTextIndexResponse
-DeleteFromTextIndexResponse
-IndexStatusResponse
-ListResourcesResponse
-RestoreTextIndexResponse
+ParseSpeechRecognitionResponse(ref string jsonStr)
+ParseCancelConnectorResponse(ref string jsonStr)
+ParseConnectorHistoryResponse(ref string jsonStr)
+ParseConnectorStatusResponse(ref string jsonStr)
+ParseCreateConnectorResponse(ref string jsonStr)
+ParseDeleteConnectorResponse(ref string jsonStr)
+RetrieveConnectorConfigurationAttributeResponse(ref string jsonStr)
+ParseRetrieveConnectorConfigurationFileResponse(ref string jsonStr)
+ParseStartConnectorResponse(ref string jsonStr)
+ParseStopConnectorResponse(ref string jsonStr)
+ParseUpdateConnectorResponse(ref string jsonStr)
+ParseExpandContainerResponse(ref string jsonStr)
+ParseStoreObjectResponse(ref string jsonStr)
+ParseViewDocumentResponse(ref string jsonStr)
+ParseGetCommonNeighborsResponse(ref string jsonStr)
+ParseGetNeighborsResponse(ref string jsonStr)
+ParseGetNodesResponse(ref string jsonStr)
+ParseGetShortestPathResponse(ref string jsonStr)
+ParseGetSubgraphResponse(ref string jsonStr)
+ParseSuggestLinksResponse(ref string jsonStr)
+ParseSummarizeGraphResponse(ref string jsonStr)
+ParseOCRDocumentResponse(ref string jsonStr)
+ParseBarcodeRecognitionResponse(ref string jsonStr)
+ParseFaceDetectionResponse(ref string jsonStr)
+ParseImageRecognitionResponse(ref string jsonStr)
+ParsePredictResponse(ref string jsonStr)
+ParseRecommendResponse(ref string jsonStr)
+ParseTrainPredictionResponse(ref string jsonStr)
+ParseCreateQueryProfileResponse(ref string jsonStr)
+ParseDeleteQueryProfileResponse(ref string jsonStr)
+ParseRetrieveQueryProfileResponse(ref string jsonStr)
+ParseUpdateQueryProfileResponse(ref string jsonStr)
+ParseFindRelatedConceptsResponse(ref string jsonStr)
+ParseParseAutoCompleteResponse(ref string jsonStr)
+ParseConceptExtractionResponse(ref string jsonStr)
+ParseExpandTermsResponse(ref string jsonStr)
+ParseHighlightTextResponse(ref string jsonStr)
+ParseIdentifyLanguageResponse(ref string jsonStr)
+ParseSentimentAnalysisResponse(ref string jsonStr)
+ParseTextTokenizationResponse(ref string jsonStr)
+ParseAddToTextIndexResponse(ref string jsonStr)
+ParseCreateTextIndexResponse(ref string jsonStr)
+ParseDeleteTextIndexResponse(ref string jsonStr)
+ParseDeleteFromTextIndexResponse(ref string jsonStr)
+ParseIndexStatusResponse(ref string jsonStr)
+ParseListResourcesResponse(ref string jsonStr)
+ParseRestoreTextIndexResponse(ref string jsonStr)
 ```
 ----
 ## License

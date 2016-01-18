@@ -5,7 +5,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using HOD.Client;
 using Windows.UI;
-using Windows.Data.Json;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using HOD.Response.Parser;
@@ -18,7 +17,7 @@ namespace SpeechRecognition
     public sealed partial class MainPage : Page
     {
         Windows.UI.Core.CoreDispatcher messageDispatcher = Window.Current.CoreWindow.Dispatcher;
-        HODClient hodClient = new HODClient("your-api-key");
+        HODClient hodClient = new HODClient("34a54d30-ddaa-4294-8e45-ebe07eefe55e");
         string jobID = "";
         StorageFile file = null;
         HODResponseParser parser = new HODResponseParser();
@@ -57,11 +56,11 @@ namespace SpeechRecognition
             {
                 jobID = "";
                 outputText.Blocks.Clear();
-                RecognizeSpeechResponse resp = (RecognizeSpeechResponse)parser.ParseStandardResponse(StandardResponse.RECOGNIZE_SPEECH, response);
+                var resp = parser.ParseSpeechRegconitionResponse(ref response);
                 String text = "";
                 if (resp != null)
                 {
-                    foreach (RecognizeSpeechResponse.Document doc in resp.document)
+                    foreach (SpeechRecognitionResponse.Document doc in resp.document)
                     {
                         text += "Paragraph: " + doc.content + "\n";
                         text += "Offset: " + doc.offset.ToString() + "\n";
@@ -92,7 +91,6 @@ namespace SpeechRecognition
                         else if (err.error == HODErrorCode.NONSTANDARD_RESPONSE)
                         {
                             // The response is a non-standard response. Define a custom class and use the ParseCustomResponse<T>() function
-                            
                             break;
                         }
                         else
@@ -123,28 +121,21 @@ namespace SpeechRecognition
             });
         }
 
-        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        private void CallSpeechRecognition(StorageFile aFile)
         {
             if (jobID.Length > 0)
             {
                 return;
             }
-            
-            if (file == null)
-            {
-                LoadFilePicker(null, null);
-                return;
-            }
-            
+
             var Params = new Dictionary<string, object>()
             {
-                {"file", file },
+                {"file", aFile },
                 {"interval", "20000" }
             };
             HodClient_onErrorOccurred("Submit Speech Recognition request. Please wait.");
             hodClient.PostRequest(ref Params, HODApps.RECOGNIZE_SPEECH, HODClient.REQ_MODE.ASYNC);
         }
-
         async private void LoadFilePicker(object sender, RoutedEventArgs e)
         {
             FileOpenPicker filePicker = new FileOpenPicker();
@@ -153,11 +144,12 @@ namespace SpeechRecognition
 
             filePicker.ViewMode = PickerViewMode.List;
 
-            file = await filePicker.PickSingleFileAsync();
+            StorageFile mp3file = await filePicker.PickSingleFileAsync();
 
-            if (file != null)
+            if (mp3file != null)
             {
-                SubmitBtn.IsEnabled = true;
+                jobID = "";
+                CallSpeechRecognition(mp3file);
             }
             else
             {
