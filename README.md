@@ -293,7 +293,7 @@ void hodClient_requestCompletedWithJobID(string response)
 ---
 **Function ParseSpeechRegconitionResponse**
 
-    object ParseSpeechRegconitionResponse(ref string jsonStr)
+    SpeechRegconitionResponse ParseSpeechRegconitionResponse(ref string jsonStr)
 
 *Description:* 
 * Parses a json string and returns a SpeechRegconitionResponse object.
@@ -304,7 +304,7 @@ void hodClient_requestCompletedWithJobID(string response)
 * jsonStr: a json string returned from a synchronous API call or from the GetJobResult or the GetJobStatus function.
 
 *Return value:*
-* An object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the returned object is null and the error or job status can be accessed by calling the GetLastError function.
+* A SpeechRegconitionResponse object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the returned object is null and the error or job status can be accessed by calling the GetLastError function.
 
 *Example code:*
 
