@@ -17,9 +17,8 @@ namespace SpeechRecognition
     public sealed partial class MainPage : Page
     {
         Windows.UI.Core.CoreDispatcher messageDispatcher = Window.Current.CoreWindow.Dispatcher;
-        HODClient hodClient = new HODClient("34a54d30-ddaa-4294-8e45-ebe07eefe55e");
+        HODClient hodClient = new HODClient("your-api-key");
         string jobID = "";
-        StorageFile file = null;
         HODResponseParser parser = new HODResponseParser();
         DispatcherTimer timer;
         int count = 0;
@@ -62,7 +61,7 @@ namespace SpeechRecognition
                 {
                     foreach (SpeechRecognitionResponse.Document doc in resp.document)
                     {
-                        text += "Paragraph: " + doc.content + "\n";
+                        text += doc.content + "\n";
                         text += "Offset: " + doc.offset.ToString() + "\n";
                     }
                 }
