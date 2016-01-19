@@ -553,11 +553,9 @@ namespace HODClientDemo
         private void useHODClient()
         {
             String hodApp = HODApps.ENTITY_EXTRACTION;
-                
             var entity_type = new List<object>();
             entity_type.Add("people_eng");
             entity_type.Add("places_eng");
-
             var Params = new Dictionary<string, object>()
             {
                 { "url", "http://www.cnn.com" },
@@ -591,7 +589,7 @@ namespace HODClientDemo
                     }
                 }
             } 
-	    else
+            else
             {
                 var errors = parser.GetLastError();
                 foreach (HODErrorObject err in errors)
@@ -612,7 +610,7 @@ namespace HODClientDemo
                     {
                         // It is an error. Check error info and handle error accordingly
                     }
-	        }
+                }
             }
         }
         private void HodClient_onErrorOccurred(string errorMessage)
@@ -635,7 +633,7 @@ namespace HODClientDemo
     public sealed partial class MainPage : Page
     {
         HODClient iodClient = new HODClient("your-apikey");
-	HODResponseParser parser = new HODResponseParser();
+        HODResponseParser parser = new HODResponseParser();
         StorageFile imageFile;
         public MainPage()
         {
@@ -676,8 +674,7 @@ namespace HODClientDemo
             else
             {
                 // Cancel picking file
-            }
-            
+            }   
         }            
         
 	// implement callback functions
@@ -696,8 +693,8 @@ namespace HODClientDemo
         private void HodClient_requestCompletedWithContent(string response)
         {
             var resp = parser.ParseOCRDocumentResponse(ref response);
-	    if (resp != null)
-	    {
+            if (resp != null)
+            {
                 var text = "";
                 foreach (OCRDocumentResponse.TextBlock obj in resp.text_block)
                 {
@@ -727,7 +724,7 @@ namespace HODClientDemo
                     {
                         // It is an error. Check error info and handle error accordingly
                     }
-	        }
+                }
             }
         }
 
