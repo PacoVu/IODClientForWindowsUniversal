@@ -360,7 +360,7 @@ void hodClient_requestCompletedWithContent(string response)
 ---
 **Function ParseCustomResponse**
 
-    object ParseCustomResponse<T>(jsonStr)
+    object ParseCustomResponse<T>(ref string jsonStr)
 
 *Description:* 
 * Parses a json string and returns a custom object type based on the T class.
@@ -368,7 +368,7 @@ void hodClient_requestCompletedWithContent(string response)
 
 *Parameters:*
 * \<T\>: a custom class object.
-* jsonStr: a json string returned from a synchronous API call or from the GetJobResult function.
+* jsonStr: a json response returned from a synchronous API call or from the GetJobResult function.
 
 *Return value:*
 * An object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the returned object is null and the error or job status can be accessed by calling the GetLastError function.
@@ -398,7 +398,7 @@ public class QueryIndexResponse
 }
 void hodClient_requestCompletedWithContent(string response)
 {
-    QueryIndexResponse resp = (QueryIndexResponse)hodParser.ParseCustomResponse<QueryIndexResponse>(response);
+    var resp = (QueryIndexResponse)hodParser.ParseCustomResponse<QueryIndexResponse>(ref response);
     if (resp != null)
     {
         foreach (QueryIndexResponse.Documents doc in resp.documents)
@@ -572,7 +572,7 @@ namespace HODClientDemo
 
         private void HodClient_requestCompletedWithContent(string response)
         {
-            EntityExtractionResponse resp = (EntityExtractionResponse)parser.ParseCustomResponse<EntityExtractionResponse>(response);
+            var resp = (EntityExtractionResponse)parser.ParseCustomResponse<EntityExtractionResponse>(ref response);
             if (resp != null)
             {
                 String people = "";
@@ -695,7 +695,7 @@ namespace HODClientDemo
 
         private void HodClient_requestCompletedWithContent(string response)
         {
-            OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseStandardResponse(StandardResponse.OCR_DOCUMENT, response);
+            var resp = parser.ParseOCRDocumentResponse(ref response);
 	    if (resp != null)
 	    {
                 var text = "";
