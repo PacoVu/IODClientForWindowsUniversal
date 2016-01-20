@@ -1,24 +1,29 @@
-# HODClient Library for Windows Universal 8.1. V1.0
+# HODClient Library for Windows Universal 8.1. V2.0
 
 ----
 ## Overview
-HODClient library for Windows Universal is a lightweight C# based API, which helps you easily integrate your Windows app with HP Haven OnDemand Services.
+HODClient library for Windows Universal is a lightweight C# based API, which helps you easily integrate your Windows app with HPE Haven OnDemand Services.
 
 HODClient library supports both Windows and Windows Phone 8.1.
 
+HODClient library v2.0 supports bulk input (source inputs can be an array) where an HOD API is capable of doing so.
+
+Version 2.0 also includes HODResponseParser library.
+
 HODClient library requires the .NET 4.5.
 
-----
+
 ## Integrate HODClient into a Windows/Windows Phone project
 1. Click the "Download Zip" button to download the HODClient library for Windows Universal 8.1.
 2. Create a new or open an existing Windows project
 3. Right click on the project's References folder and select "Add reference...".
->![](/images/importlibrary1.jpg)
+![](/images/importlibrary1.jpg)
 4. Browse to the folder where you saved the library and select the HODClient.dll.
->![](/images/importlibrary2.jpg)
+![](/images/importlibrary2.jpg)
+5. If you want to use the HODResponseParser library, select also the HODResponseParser.dll and Newtonsoft.json.dll
 
-----
-## API References
+
+## HODClient API References
 **Constructor**
 
     HODClient(string apiKey, String version="v1")
@@ -33,8 +38,11 @@ HODClient library requires the .NET 4.5.
 *Example code:*
 
     using HOD.Client;
-    
+    using HOD.Response.Parser;
+
     HODClient hodClient = new HODClient("your-api-key");
+
+    HODResponseParser parser = new HODResponseParser(); 
 
 ----
 **Function GetRequest**
@@ -49,14 +57,21 @@ HODClient library requires the .NET 4.5.
 
 >Note: 
 
->In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary\<String,String\> object with the key is the parameter name and the values separated by commas ","
-
+>For a parameter with its type is an array<>, the parameter must be defined in a List\<object\>. 
 >E.g.:
-## 
-    var entity_array = new Dictionary<String, String>
+
+
+    var entity_type = new List<object>();
+    entity_type.Add("people_eng");
+    entity_type.Add("places_eng");
+    
+    var Params = new Dictionary<string, object>()
     {
-        {"entity_type", "people_eng,places_eng"}
-    }
+        {"url", "http://www.cnn.com" },
+        {"entity_type", entity_type }
+    };
+
+
 
 * hodApp: a string to identify a Haven OnDemand API. E.g. "extractentities". Current supported apps are listed in the HODApps class.
 
@@ -68,21 +83,27 @@ HODClient library requires the .NET 4.5.
 * If there is an error occurred, the error message will be sent via the onErrorOccurred(String errorMessage) callback function.
 
 *Example code:*
-    Call the Entity Extraction API to find people and places from CNN website
+    Call the Entity Extraction API to find people and places from CNN and BBC website
+```
+String hodApp = HODApps.ENTITY_EXTRACTION;
 
-    String hodApp = HODApps.ENTITY_EXTRACTION;
-    var arrays = new Dictionary<String, String>
-    {
-        {"entity_type", "people_eng,places_eng"}
-    }
-    var Params = new Dictionary<String, Object> 
-    { 
-        {"url", "http://www.cnn.com"},
-        {"arrays", arrays}
-    };
-    hodClient.GetRequest(ref Params, hodApp, HODClient.REQ_MODE.SYNC);
+var urls = new List<object>();
+urls.Add("http://www.cnn.com");
+urls.Add("http://www.bbc.com");
 
-----
+var entity_type = new List<object>();
+entity_type.Add("people_eng");
+entity_type.Add("places_eng");
+
+var Params = new Dictionary<string, object>()
+{
+    {"url", urls },
+    {"entity_type", entity_type }
+};
+
+hodClient.GetRequest(ref Params, hodApp, HODClient.REQ_MODE.SYNC);
+```
+
 **Function PostRequest**
 
     void PostRequest(ref Dictionary<String, Object> Params, String hodApp, REQ_MODE mode)
@@ -93,18 +114,30 @@ HODClient library requires the .NET 4.5.
 *Parameters:*
 * Params: a Dictionary object containing key/value pair parameters to be sent to a Haven OnDemand API, where the keys are the parameters of that API
 
->Note:
+> Note:
 
 > 1. In the case of the "file" parameter, the value must be a StorageFile object.
-> 2. In the case of a parameter type is an array<>, the key must be defined as "arrays" and the value must be a Dictionary\<String,String\> object with the key is the parameter name and the values separated by commas ",".
+> 2. For a parameter with its type is an array<>, the parameter must be defined in a List\<object\>.
+> E.g.:
 
->E.g.:
-## 
-    var entity_array = new Dictionary<String, String>
+    var entity_type = new List<object>();
+    entity_type.Add("people_eng");
+    entity_type.Add("places_eng");
+    
+    StorageFile file1 = await StorageFile.GetFileFromPathAsync("c:\doc1.txt");
+    StorageFile file2 = await StorageFile.GetFileFromPathAsync("c:\doc2.txt");
+
+    var files = new List<object>();
+    files.Add(file1);
+    files.Add(file2);
+
+    var Params = new Dictionary<string, object>()
     {
-        {"entity_type", "people_eng,places_eng"}
-    }
+        {"file", files },
+        {"entity_type", entity_type }
+    };
 
+ 
 * hodApp: a string to identify a Haven OnDemand API. E.g. "ocrdocument". Current supported apps are listed in the HODApps class.
 
 * mode [REQ_MODE.SYNC | REQ_MODE.ASYNC]: specifies API call as Asynchronous or Synchronous.
@@ -116,17 +149,17 @@ HODClient library requires the .NET 4.5.
 
 *Example code:*
     Call the OCR Document API to scan text from an image file
+```
+String hodApp = HODApps.OCR_DOCUMENT;
+StorageFile file = await StorageFile.GetFileFromPathAsync("c:\image.jpg");
+var Params =  new Dictionary<String,Object>
+{
+    {"file", file},
+    {"mode", "document_photo"}
+};
+hodClient.PostRequest(ref Params, hodApp, HODClient.REQ_MODE.ASYNC);
+```
 
-    String hodApp = HODApps.OCR_DOCUMENT;
-    StorageFile file = await StorageFile.GetFileFromPathAsync("c:\image.jpg");
-    var Params =  new Dictionary<String,Object>
-    {
-        {"file", file},
-        {"mode", "document_photo"}
-    };
-    hodClient.PostRequest(ref Params, hodApp, HODClient.REQ_MODE.ASYNC);
-
-----
 **Function GetJobResult**
 
     void GetJobResult(String jobID)
@@ -142,232 +175,617 @@ HODClient library requires the .NET 4.5.
 
 *Example code:*
     Parse a JSON string contained a jobID and call the function to get the actual content from Haven OnDemand server 
-
-    void hodClient_requestCompletedWithJobID(string response)
+```
+void hodClient_requestCompletedWithJobID(string response)
+{
+    JsonValue root;
+    JsonObject jsonObject;
+    if (JsonValue.TryParse(response, out root))
     {
-        JsonValue root;
-        JsonObject jsonObject;
-        if (JsonValue.TryParse(response, out root))
-        {
-            jsonObject = root.GetObject();
-            string jobId = jsonObject.GetNamedString("jobID");
-            hodClient.GetJobResult(jobId);
-        }
+        jsonObject = root.GetObject();
+        string jobId = jsonObject.GetNamedString("jobID");
+        hodClient.GetJobResult(jobId);
     }
+}
+```
 
-----
-## API callback functions
-You will need to implement callback functions to receive responses from Haven OnDemand server
+**Function GetJobStatus**
+```
+GetJobStatus(String jobID)
+```
+*Description:*
+* Sends a request to Haven OnDemand to retrieve status of a job identified by a job ID. If the job is completed, the response will be the result of that job. Otherwise, the response will contain the current status of the job. 
 
-    hodClient.requestCompletedWithContent += HodClient_requestCompletedWithContent;
-    hodClient.requestCompletedWithJobID += HodClient_requestCompletedWithJobID;
-    hodClient.onErrorOccurred += HodClient_onErrorOccurred;
-# 
-When you call the GetRequest() or PostRequest() with the ASYNC mode, or call the GetJobResult() function, the response will be returned to this callback function. The response is a JSON string containing the jobID.
+*Parameter:*
+* jobID: the job ID returned from an Haven OnDemand API upon an asynchronous call.
 
-    private void HodClient_requestCompletedWithJobID(string response)
-    {
+*Response:* 
+* Response will be returned via the requestCompletedWithContent(String response)
+
+*Example code:*
+    Parse a JSON string contained a jobID and call the function to get the actual content from Haven OnDemand server 
+```
+void hodClient_requestCompletedWithJobID(string response)
+{
+    string jobID = parser.ParseJobID(response);
+    if (jobID != "")    
+        hodClient.GetJobStatus(jobId);
+}
+
+private void HodClient_requestCompletedWithContent(string response)
+{
+    // use the parser to parse the response
+}
+``` 
+
+## HODClient API callback functions
+You will need to implement callback functions to receive responses from Haven OnDemand server.
+```
+hodClient.requestCompletedWithContent += HodClient_requestCompletedWithContent;
+hodClient.requestCompletedWithJobID += HodClient_requestCompletedWithJobID;
+hodClient.onErrorOccurred += HodClient_onErrorOccurred;
+``` 
+When you call the GetRequest() or PostRequest() with the ASYNC mode, the response will be returned to this callback function. The response is a JSON string containing the jobID.
+```
+private void HodClient_requestCompletedWithJobID(string response)
+{
     
-    }
-# 
+}
+``` 
 
-When you call the GetRequest() or PostRequest() with the SYNC mode, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
-
-    private void HodClient_requestCompletedWithContent(string response)
-    {
+When you call the GetRequest() or PostRequest() with the SYNC mode, or call the GetJobResult() or GetJobStatus() function, the response will be returned to this callback function. The response is a JSON string containing the actual result of the service.
+```
+private void HodClient_requestCompletedWithContent(string response)
+{
     
-    }
-# 
+}
+``` 
 
 If there is an error occurred, the error message will be returned to this callback function.
-
-    private void HodClient_onErrorOccurred(string errorMessage)
-    {
+```
+private void HodClient_onErrorOccurred(string errorMessage)
+{
     
-    }
+}
+```
 
+## HODResponseParser API References
+**Constructor**
+
+    HODResponseParser()
+
+*Description:* 
+* Creates and initializes an HODResponseParser object.
+
+*Parameters:*
+* None.
+
+*Example code:*
+
+    using HOD.Response.Parser;
+
+    HODResponseParser parser = new HODResponseParser(); 
+
+----
+**Function ParseJobID**
+
+    string ParseJobID(string response)
+
+*Description:* 
+* Parses a jobID from a json string returned from an asynchronous API call.
+
+*Parameters:*
+* response: a json string returned from an asynchronous API call.
+
+*Return value:*
+* The jobID or an empty string if not found.
+
+*Example code:*
+
+```
+void hodClient_requestCompletedWithJobID(string response)
+{
+    string jobID = parser.ParseJobID(response);
+    if (jobID != "")
+        hodClient.GetJobResult(jobID);
+}
+```
+---
+**Function ParseSpeechRegconitionResponse**
+
+    SpeechRegconitionResponse ParseSpeechRegconitionResponse(ref string jsonStr)
+
+*Description:* 
+* Parses a json string and returns a SpeechRegconitionResponse object.
+
+>Note: See the full list of standard parser functions from the Standard response parser functions section at the end of this document.
+
+*Parameters:*
+* jsonStr: a json string returned from a synchronous API call or from the GetJobResult or the GetJobStatus function.
+
+*Return value:*
+* A SpeechRegconitionResponse object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the returned object is null and the error or job status can be accessed by calling the GetLastError function.
+
+*Example code:*
+
+```
+// 
+void hodClient_requestCompletedWithContent(string response)
+{
+    var resp = parser.ParseOCRDocumentResponse(ref response);
+    if (resp != null)
+    {
+        string text = "";
+        foreach (OCRDocumentResponse.TextBlock obj in resp.text_block)
+        {
+            text += String.Format("Recognized text: {0}\n", obj.text);
+            text += String.Format("Top/Left corner: {0}/{1}\n", obj.left, obj.top);
+            text += String.Format("Width/Height: {0}/{1}\n", obj.width, obj.height);
+        }
+	outputText.Text = text;
+    }
+    else
+    {
+        var errors = parser.GetLastError();
+        foreach (HODErrorObject err in errors)
+        {
+            if (err.error == HODErrorCode.QUEUED)
+            {
+                // Task is in queue. Let's wait for a few second then call GetJobStatus() again
+                hodClient.GetJobStatus(err.jobID);
+                break;
+            }
+            else if (err.error == HODErrorCode.IN_PROGRESS)
+            {
+                // Task is In Progress. Let's wait for some time then call GetJobStatus() again
+                hodClient.GetJobStatus(err.jobID);
+                break;
+            }
+            else if (err.error == HODErrorCode.NONSTANDARD_RESPONSE)
+            {
+                // The response is a non-standard response. Define a custom class and use the ParseCustomResponse<T>(response) function
+                break;
+            }
+            else // It is an error. Let's print out the error code, reason and detail
+            {
+                outputText.Text += err.error.ToString() + "\n";
+                outputText.Text += err.reason + "\n";
+                outputText.Text += err.detail + "\n";
+            }
+	}
+    }
+}
+```
+
+---
+**Function ParseCustomResponse**
+
+    object ParseCustomResponse<T>(ref string jsonStr)
+
+*Description:* 
+* Parses a json string and returns a custom object type based on the T class.
+
+
+*Parameters:*
+* \<T\>: a custom class object.
+* jsonStr: a json response returned from a synchronous API call or from the GetJobResult function.
+
+*Return value:*
+* An object containing API's response values. If there is an error or if the job is not completed (callback from a GetJobStatus call), the returned object is null and the error or job status can be accessed by calling the GetLastError function.
+
+*Example code:*
+
+```
+// define a custom class for Query Text Index API response
+public class QueryIndexResponse
+{
+    public List<Documents> documents;
+    public int totalhits { get; set; }
+    public class Documents
+    {
+        public string reference { get; set; } 
+        public string index { get; set; }
+        public double weight { get; set; } 
+        public List<string> from { get; set; } 
+        public List<string> to { get; set; } 
+        public List<string> sent { get; set; } 
+        public List<string> subject { get; set; } 
+        public List<string> attachment { get; set; }
+        public List<string> hasattachments { get; set; }
+        public List<string> content_type { get; set; }
+        public string content { get; set; } 
+    }
+}
+void hodClient_requestCompletedWithContent(string response)
+{
+    var resp = (QueryIndexResponse)hodParser.ParseCustomResponse<QueryIndexResponse>(ref response);
+    if (resp != null)
+    {
+        foreach (QueryIndexResponse.Documents doc in resp.documents)
+        {
+	    // walk thru documents array
+            var reference = doc.reference;
+            var index = doc.index;
+            var weight = doc.weight;
+            if (doc.from != null)
+            {
+                var from = doc.from[0];
+            }
+            if (doc.to != null)
+                var to = doc.to[0];
+            
+            // parse any other values
+        }
+    }
+    else
+    {
+        var errors = parser.GetLastError();
+        foreach (HODErrorObject err in errors)
+        {
+            if (err.error == HODErrorCode.QUEUED)
+            {
+                // Task is in queue. Let's wait for a few second then call GetJobStatus() again
+                hodClient.GetJobStatus(err.jobID);
+                break;
+            }
+            else if (err.error == HODErrorCode.IN_PROGRESS)
+            {
+                // Task is In Progress. Let's wait for some time then call GetJobStatus() again
+                hodClient.GetJobStatus(err.jobID);
+                break;
+            }
+            else // It is an error. Let's print out the error code, reason and detail
+            {
+                outputText.Text += err.error.ToString() + "\n";
+                outputText.Text += err.reason + "\n";
+                outputText.Text += err.detail + "\n";
+            }
+	}
+    }
+}
+```
+---
+**Function GetLastError**
+
+    List<HODErrorObject> GetLastError()
+
+*Description:*
+ 
+* Get the latest error(s) if any happened during parsing the json string or HOD error returned from HOD server. > Note: The job "queued" or "in progress" status is also considered as an error situation. See the example below for how to detect and handle error status. 
+
+*Parameters:*
+
+* None.
+
+*Return value:*
+
+* An list object contains HODErrorObject
+
+*Example code:*
+
+```
+var errors = parser.GetLastError();
+foreach (HODErrorObject err in errors)
+{
+    if (err.error == HODErrorCode.QUEUED)
+    {
+        // Task is in queue. Let's wait for a few second then call GetJobStatus() again
+        hodClient.GetJobStatus(err.jobID);
+        break;
+    }
+    else if (err.error == HODErrorCode.IN_PROGRESS)
+    {
+        // Task is In Progress. Let's wait for some time then call GetJobStatus() again
+        hodClient.GetJobStatus(err.jobID);
+        break;
+    }
+    else 
+    {
+        // It is an error. Check error info and handle error accordingly
+        var result = err.error.ToString() + "\n";
+        result += err.reason + "\n";
+        result += err.detail + "\n";
+    }
+}
+```
 ----
 ## Demo code 1: 
 
 **Call the Entity Extraction API to extract people and places from cnn.com website with a synchronous GET request**
+```
+using HOD.Client;
+using HOD.Response.Parser;
 
-    using HOD.Client;
-    
-    namespace HODClientDemo
+namespace HODClientDemo
+{
+    // define Entity Extraction response object
+    public class EntityExtractionResponse
     {
-        public sealed partial class MainPage : Page
+        public List<Entity> entities { get; set; }
+
+        public class Entity
         {
-            HODClient hodClient = new HODClient("your-apikey");
+            public string normalized_text { get; set; }
+            public string original_text { get; set; }
+            public string type { get; set; }
+            public int normalized_length { get; set; }
+            public int original_length { get; set; }
+            public double score { get; set; }
+            public string normalized_date { get; set; }
+            public EntityAdditionalInformation additional_information { get; set; }
+            public List<object> components { get; set; }
+        }
+        public class EntityAdditionalInformation
+        {
+            public List<string> person_profession { get; set; }
+            public string person_date_of_birth { get; set; }
+            public int wikidata_id { get; set; }
+            public string wikipedia_eng { get; set; }
+            public string image { get; set; }
+            public string person_date_of_death { get; set; }
 
-            public MainPage()
-            {
-                this.InitializeComponent();
+            public double lon { get; set; } 
+            public double lat { get; set; }
+            public int place_population { get; set; } 
+            public string place_country_code { get; set; } 
+            public string place_region1 { get; set; } 
+            public string place_region2 { get; set; } 
+            public string url_homepage { get; set; }
+        }
+    }    
+    
+    public sealed partial class MainPage : Page
+    {
+        HODClient hodClient = new HODClient("your-apikey");
+        HODResponseParser parser = new HODResponseParser();
+
+        public MainPage()
+        {
+            this.InitializeComponent();
                 
-                hodClient.requestCompletedWithContent += HodClient_requestCompletedWithContent;
-                hodClient.requestCompletedWithJobID += HodClient_requestCompletedWithJobID;
-                hodClient.onErrorOccurred += HodClient_onErrorOccurred;
+            hodClient.requestCompletedWithContent += HodClient_requestCompletedWithContent;
+            hodClient.requestCompletedWithJobID += HodClient_requestCompletedWithJobID;
+            hodClient.onErrorOccurred += HodClient_onErrorOccurred;
 
-                useHODClient();
-            }
+            useHODClient();
+        }
 
-            private void useHODClient()
+        private void useHODClient()
+        {
+            String hodApp = HODApps.ENTITY_EXTRACTION;
+            var entity_type = new List<object>();
+            entity_type.Add("people_eng");
+            entity_type.Add("places_eng");
+            var Params = new Dictionary<string, object>()
             {
-                String hodApp = HODApps.ENTITY_EXTRACTION;
-                
-                var arrays = new Dictionary<String, String>
-                {
-                    {"entity_type", "people_eng,places_eng"}
-                };
+                { "url", "http://www.cnn.com" },
+                { "entity_type", entity_type },
+                { "unique_entities", "true" }
+            };
 
-                var Params = new Dictionary<string, object>
-                {
-                    { "url", "http://www.cnn.com" },
-                    { "arrays", arrays },
-                    { "unique_entities", "true" }
-                };
+            hodClient.GetRequest(ref Params, hodApp, HODClient.REQ_MODE.SYNC);
+        }
 
-                hodClient.GetRequest(ref Params, hodApp, HODClient.REQ_MODE.SYNC);
-            }
+        // implement callback functions
 
-            // implement callback functions
-
-            private void HodClient_requestCompletedWithContent(string response)
+        private void HodClient_requestCompletedWithContent(string response)
+        {
+            var resp = (EntityExtractionResponse)parser.ParseCustomResponse<EntityExtractionResponse>(ref response);
+            if (resp != null)
             {
-                JsonValue root;
-                JsonObject jsonObj;
                 String people = "";
                 String places = "";
-                bool ret = JsonValue.TryParse(response, out root);
-                if (ret)
+                foreach (EntityExtractionResponse.Entity entity in resp.entities)
                 {
-                    jsonObject = root.GetObject();
-                    if (jsonObject.ContainsKey("entities"))
+                    if (entity.type == "people_eng")
                     {
-                        var entityArray = jsonObject.GetNamedArray("entities");
-                        foreach (var entity in entityArray)
-                        {
-                            var entityObj = entity.GetObject();
-                            var type = entityObj.GetNamedString("type");
-                            if (type == "people_eng")
-                            {
-                                people += entityObj.GetNamedString("original_text") + System.Environment.NewLine;
-                                // parse any other interested information about a people
-                            }
-                            else if (type == "places_eng")
-                            {
-                                places += entityObj.GetNamedString("original_text") + System.Environment.NewLine;
-                                // parse any other interested information about a place
-                            }
-                        }
+                        people += entity.original_text + System.Environment.NewLine;
+                        // parse any other interested information about a people
+                    }
+                    else if (entity.type == "places_eng")
+                    {
+                        places += entity.original_text + System.Environment.NewLine;
+                        // parse any other interested information about a place
+                    }
+                }
+            } 
+            else
+            {
+                var errors = parser.GetLastError();
+                foreach (HODErrorObject err in errors)
+                {
+                    if (err.error == HODErrorCode.QUEUED)
+                    {
+                        // Task is in queue. Let's wait for a few second then call GetJobStatus() again
+                        hodClient.GetJobStatus(err.jobID);
+                        break;
+                    }
+                    else if (err.error == HODErrorCode.IN_PROGRESS)
+                    {
+                        // Task is In Progress. Let's wait for some time then call GetJobStatus() again
+                        hodClient.GetJobStatus(err.jobID);
+                        break;
+                    }
+                    else 
+                    {
+                        // It is an error. Check error info and handle error accordingly
                     }
                 }
             }
-
-	    private void HodClient_onErrorOccurred(string errorMessage)
-            {
-                // handle error if any
-            }
+        }
+        private void HodClient_onErrorOccurred(string errorMessage)
+        {
+	    // handle error if any
         }
     }
-
-----
+}
+```
 
 ## Demo code 2:
  
 **Call the OCR Document API to recognize text from an image with an asynchronous POST request**
+```
+using HOD.Client;
+using HOD.Response.Parser;
 
-    using HOD.Client;
-    
-    namespace HODClientDemo
+namespace HODClientDemo
+{
+    public sealed partial class MainPage : Page
     {
-        public sealed partial class MainPage : Page
+        HODClient iodClient = new HODClient("your-apikey");
+        HODResponseParser parser = new HODResponseParser();
+        StorageFile imageFile;
+        public MainPage()
         {
-            HODClient iodClient = new HODClient("your-apikey");
-
-            public MainPage()
-            {
-                this.InitializeComponent();
+            this.InitializeComponent();
                 
-                hodClient.requestCompletedWithContent += HodClient_requestCompletedWithContent;
-                hodClient.requestCompletedWithJobID += HodClient_requestCompletedWithJobID;
-                hodClient.onErrorOccurred += HodClient_onErrorOccurred;
+            hodClient.requestCompletedWithContent += HodClient_requestCompletedWithContent;
+            hodClient.requestCompletedWithJobID += HodClient_requestCompletedWithJobID;
+            hodClient.onErrorOccurred += HodClient_onErrorOccurred;
+        }
 
+        private void useHODClient()
+        {
+            String hodApp = hODApps.OCR_DOCUMENT;
+            StorageFile imgFile = StorageFile.GetFileFromPathAsync("path/and/filename");
+            var Params = new Dictionary<string, object>
+            {
+                { "file", imageFile },
+                { "mode", "document_photo" }
+            };
+
+            hodClient.PostRequest(ref Params, hodApp, HODClient.REQ_MODE.ASYNC);
+        }
+
+        private async void LoadFileButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            FileOpenPicker filePicker = new FileOpenPicker();
+            filePicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            filePicker.FileTypeFilter.Add(".jpg");
+            filePicker.FileTypeFilter.Add(".png");
+            filePicker.ViewMode = PickerViewMode.Thumbnail;
+
+            imageFile = await filePicker.PickSingleFileAsync();
+
+            if (imageFile != null)
+            {
                 useHODClient();
             }
-
-            private void useHODClient()
+            else
             {
-                String hodApp = hODApps.OCR_DOCUMENT;
-                StorageFile imgFile = StorageFile.GetFileFromPathAsync("path/and/filename");
-                var Params = new Dictionary<string, object>
-                {
-                    { "file", imgFile },
-                    { "mode", "document_photo" }
-                };
+                // Cancel picking file
+            }   
+        }            
+        
+	// implement callback functions
+            
+        /**************************************************************************************
+        * An async request will result in a response with a jobID. We parse the response to get
+        * the jobID and send a request for the actual content identified by the jobID.
+        **************************************************************************************/ 
+        private void HodClient_requestCompletedWithJobID(string response)
+        {
+            string jobID = parser.ParseJobID(response);
+            if (jobID != "")
+                client.GetJobResult(jobID);
+        }
 
-                hodClient.PostRequest(ref Params, hodApp, HODClient.REQ_MODE.ASYNC);
-            }
-            
-            // implement callback functions
-            
-            /**************************************************************************************
-            * An async request will result in a response with a jobID. We parse the response to get
-            * the jobID and send a request for the actual content identified by the jobID.
-            **************************************************************************************/ 
-            private void HodClient_requestCompletedWithJobID(string response)
+        private void HodClient_requestCompletedWithContent(string response)
+        {
+            var resp = parser.ParseOCRDocumentResponse(ref response);
+            if (resp != null)
             {
-                JsonValue root;
-                JsonObject jsonObj;
-                bool ret = JsonValue.TryParse(response, out root);
-                if (ret)
+                var text = "";
+                foreach (OCRDocumentResponse.TextBlock obj in resp.text_block)
                 {
-                    jsonObj = root.GetObject();
-                    String jobID = jsonObj.GetNamedString("jobID");
-                    hodClient.GetJobResult(jobID);
+                    text += String.Format("Recognized text: {0}\n", obj.text);
+                    text += String.Format("Top/Left corner: {0}/{1}\n", obj.left, obj.top);
+                    text += String.Format("Width/Height: {0}/{1}\n", obj.width, obj.height);
                 }
             }
-
-            private void HodClient_requestCompletedWithContent(string response)
+            else
             {
-                // response is a json string from server
-                JsonValue root;
-                JsonObject jsonObj;
-                String recognizedText = "";
-                if (JsonValue.TryParse(response, out root))
+                var errors = parser.GetLastError();
+                foreach (HODErrorObject err in errors)
                 {
-                    jsonObject = root.GetObject();
-                    if (jsonObject.ContainsKey("actions"))
+                    if (err.error == HODErrorCode.QUEUED)
                     {
-                        var actionArray = jsonObject.GetNamedArray("actions");
-                        foreach (var action in actionArray)
-                        {
-                            var actionObj = action.GetObject();
-                            if (actionObj.ContainsKey("result"))
-                            {
-                                var resultObj = actionObj.GetNamedObject("result");
-                                if (resultObj.ContainsKey("text_block"))
-                                {
-                                    var textArray = resultObj.GetNamedArray("text_block");
-                                    foreach (var textBlock in textArray)
-                                    {
-                                        var obj = textBlock.GetObject();
-                                        if (obj.ContainsKey("text"))
-                                            recognizedText += obj.GetNamedString("text");
-                                    }
-                                }
-                            }
-                        }
+                        // Task is in queue. Let's wait for a few second then call GetJobStatus() again
+                        hodClient.GetJobStatus(err.jobID);
+                        break;
+                    }
+                    else if (err.error == HODErrorCode.IN_PROGRESS)
+                    {
+                        // Task is In Progress. Let's wait for some time then call GetJobStatus() again
+                        hodClient.GetJobStatus(err.jobID);
+                        break;
+                    }
+                    else 
+                    {
+                        // It is an error. Check error info and handle error accordingly
                     }
                 }
             }
+        }
 
-            private void HodClient_onErrorOccurred(string errorMessage)
-            {
-                // handle error if any
-            }
+        private void HodClient_onErrorOccurred(string errorMessage)
+        {
+            // handle error if any
         }
     }
-
+}
+```
+----
+## Standard response parser functions
+```
+ParseSpeechRecognitionResponse(ref string jsonStr)
+ParseCancelConnectorResponse(ref string jsonStr)
+ParseConnectorHistoryResponse(ref string jsonStr)
+ParseConnectorStatusResponse(ref string jsonStr)
+ParseCreateConnectorResponse(ref string jsonStr)
+ParseDeleteConnectorResponse(ref string jsonStr)
+ParseRetrieveConnectorConfigurationAttributeResponse(ref string jsonStr)
+ParseRetrieveConnectorConfigurationFileResponse(ref string jsonStr)
+ParseStartConnectorResponse(ref string jsonStr)
+ParseStopConnectorResponse(ref string jsonStr)
+ParseUpdateConnectorResponse(ref string jsonStr)
+ParseExpandContainerResponse(ref string jsonStr)
+ParseStoreObjectResponse(ref string jsonStr)
+ParseViewDocumentResponse(ref string jsonStr)
+ParseGetCommonNeighborsResponse(ref string jsonStr)
+ParseGetNeighborsResponse(ref string jsonStr)
+ParseGetNodesResponse(ref string jsonStr)
+ParseGetShortestPathResponse(ref string jsonStr)
+ParseGetSubgraphResponse(ref string jsonStr)
+ParseSuggestLinksResponse(ref string jsonStr)
+ParseSummarizeGraphResponse(ref string jsonStr)
+ParseOCRDocumentResponse(ref string jsonStr)
+ParseBarcodeRecognitionResponse(ref string jsonStr)
+ParseFaceDetectionResponse(ref string jsonStr)
+ParseImageRecognitionResponse(ref string jsonStr)
+ParsePredictResponse(ref string jsonStr)
+ParseRecommendResponse(ref string jsonStr)
+ParseTrainPredictionResponse(ref string jsonStr)
+ParseCreateQueryProfileResponse(ref string jsonStr)
+ParseDeleteQueryProfileResponse(ref string jsonStr)
+ParseRetrieveQueryProfileResponse(ref string jsonStr)
+ParseUpdateQueryProfileResponse(ref string jsonStr)
+ParseFindRelatedConceptsResponse(ref string jsonStr)
+ParseParseAutoCompleteResponse(ref string jsonStr)
+ParseConceptExtractionResponse(ref string jsonStr)
+ParseExpandTermsResponse(ref string jsonStr)
+ParseHighlightTextResponse(ref string jsonStr)
+ParseIdentifyLanguageResponse(ref string jsonStr)
+ParseSentimentAnalysisResponse(ref string jsonStr)
+ParseTextTokenizationResponse(ref string jsonStr)
+ParseAddToTextIndexResponse(ref string jsonStr)
+ParseCreateTextIndexResponse(ref string jsonStr)
+ParseDeleteTextIndexResponse(ref string jsonStr)
+ParseDeleteFromTextIndexResponse(ref string jsonStr)
+ParseIndexStatusResponse(ref string jsonStr)
+ParseListResourcesResponse(ref string jsonStr)
+ParseRestoreTextIndexResponse(ref string jsonStr)
+```
 ----
 ## License
 Licensed under the MIT License.
