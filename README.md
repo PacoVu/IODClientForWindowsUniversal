@@ -14,21 +14,14 @@ HODClient library requires the .NET 4.5.
 
 ----
 ## Integrate HODClient into a Windows/Windows Phone project
->Option 1: Install from nuget.org
 1. Right click on the project's References folder and select "Manage Nuget Packages...".
 >![](/images/managenuget.jpg)
+
 2. Select Browse and choose nuget.org for Package source then type in the search field "HavenOnDemand"
 >![](/images/installhodnuget.jpg)
+
 3. Select a package and click Install.
 
->Option 2: Download and manually add to project
-1. Click the "Download Zip" button to download the HODClient library for Windows Universal 8.1.
-2. Create a new or open an existing Windows project
-3. Right click on the project's References folder and select "Add reference...".
->![](/images/importlibrary1.jpg)
-4. Browse to the folder where you saved the library and select the HODClient.dll.
->![](/images/importlibrary2.jpg)
-5. If you want to use the HODResponseParser library, select also the HODResponsePArser.dll and Newtonsoft.json.dll
 ----
 ## HODClient API References
 **Constructor**
