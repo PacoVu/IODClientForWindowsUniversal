@@ -317,7 +317,7 @@ void hodClient_requestCompletedWithJobID(string response)
 // 
 void hodClient_requestCompletedWithContent(string response)
 {
-    OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseServerResponse(SupportedApps.OCR_DOCUMENT, response);
+    OCRDocumentResponse resp = parser.ParseOCRDocumentResponse(ref response);
     if (resp != null)
     {
         string text = "";
@@ -398,7 +398,7 @@ public class QueryIndexResponse
 }
 void hodClient_requestCompletedWithContent(string response)
 {
-    QueryIndexResponse resp = (QueryIndexResponse)hodParser.ParseCustomResponse<QueryIndexResponse>(response);
+    QueryIndexResponse resp = (QueryIndexResponse)hodParser.ParseCustomResponse<QueryIndexResponse>(ref response);
     if (resp != null)
     {
         foreach (QueryIndexResponse.Documents doc in resp.documents)
@@ -529,7 +529,7 @@ namespace HODClientDemo
 
         private void HodClient_requestCompletedWithContent(string response)
         {
-            EntityExtractionResponse resp = (EntityExtractionResponse)parser.ParseCustomResponse<EntityExtractionResponse>(response);
+            EntityExtractionResponse resp = (EntityExtractionResponse)parser.ParseCustomResponse<EntityExtractionResponse>(ref response);
             if (resp != null)
             {
                 String people = "";
@@ -652,7 +652,7 @@ namespace HODClientDemo
 
         private void HodClient_requestCompletedWithContent(string response)
         {
-            OCRDocumentResponse resp = (OCRDocumentResponse)parser.ParseServerResponse(SupportedApps.OCR_DOCUMENT, response);
+            OCRDocumentResponse resp = parser.ParseOCRDocumentResponse(ref response);
 	    if (resp != null)
 	    {
                 var text = "";
